@@ -102,6 +102,11 @@ RUN mkdir -p ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.15.1/ \
     && curl -L -O -s -S http://home.apache.org/~aajisaka/repository/io/grpc/protoc-gen-grpc-java/1.15.1/protoc-gen-grpc-java-1.15.1.pom \
     && curl -L -O -s -S http://home.apache.org/~aajisaka/repository/io/grpc/protoc-gen-grpc-java/1.15.1/protoc-gen-grpc-java-1.15.1.pom.sha1
 
+###
+# Avoid out of memory errors in builds
+###
+ENV MAVEN_OPTS -Xms256m -Xmx1536m
+
 RUN mkdir -p ~/hadoop-logs/
 
 RUN git clone https://github.com/apache/hadoop \
