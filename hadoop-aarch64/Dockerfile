@@ -84,6 +84,12 @@ RUN git clone https://github.com/google/snappy /opt/snappy \
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.5.1.1.tar.gz | tar zx -C /opt/
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-2.5.0.tar.gz | tar zx -C /opt/
 RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf
+RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zx -C /opt/
+
+# User pre-compiled hbase artifact
+RUN mkdir -p ~/.m2/repository/org/apache/ \
+    && cd mkdir -p ~/.m2/repository/org/apache/ \
+    && curl -sL https://github.com/liusheng/package/releases/download/hbase-artifacts-aarch64/hbase.tar.gz | tar zx
 ########## For Hbase building ###################
 
 RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
