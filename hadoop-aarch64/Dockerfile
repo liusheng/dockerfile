@@ -61,6 +61,7 @@ RUN apt-get -q update \
 
 # Use pre-compiled protobuf to save time
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.7.1.tar.gz | tar zx -C /opt/
+RUN echo "/opt/protobuf-3.7.1/lib/" > /etc/ld.so.conf.d/protobuf-3.7.1.conf
 ENV PROTOBUF_HOME /opt/protobuf-3.7.1
 ENV PATH "${PATH}:/opt/protobuf-3.7.1/bin"
 
