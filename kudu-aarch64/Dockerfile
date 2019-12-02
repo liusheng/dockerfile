@@ -37,7 +37,7 @@ RUN apt-get -q update \
         curl \
         flex \
         gdb \
-        git
+        git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
