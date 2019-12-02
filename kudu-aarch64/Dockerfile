@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
-    && apt-get -q install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
         libsasl2-dev \
         libsasl2-modules \
         libsasl2-modules-gssapi-mit \
@@ -31,7 +31,6 @@ RUN apt-get -q update \
         vim-common \
         make \
         cmake \
-        install \
         autoconf \
         automake \
         curl \
