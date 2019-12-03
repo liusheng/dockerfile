@@ -2,10 +2,7 @@ FROM ubuntu:bionic
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-######
-# Install common dependencies from packages. Versions here are either
-# sufficient or irrelevant.
-######
+RUN echo "deb http://ports.ubuntu.com/ubuntu-ports xenial main" >> /etc/apt/sources.list
 
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
