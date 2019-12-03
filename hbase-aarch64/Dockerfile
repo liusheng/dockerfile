@@ -25,26 +25,32 @@ RUN apt-get -q update \
 #######
 # OpenJDK 7
 #######
+# RUN apt-get -q update \
+#     && apt-get install -f \
+#     && apt-get -q install -y --no-install-recommends software-properties-common \
+#     && add-apt-repository ppa:openjdk-r/ppa -y \
+#     && apt-get -q update \
+#     && apt-get -q install -y --no-install-recommends openjdk-7-jdk \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+#
+# ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-arm64
+
 RUN apt-get -q update \
-    && apt-get install -f \
-    && apt-get -q install -y --no-install-recommends software-properties-common \
-    && add-apt-repository ppa:openjdk-r/ppa -y \
-    && apt-get -q update \
-    && apt-get -q install -y --no-install-recommends openjdk-7-jdk \
+    && apt-get -q install -y --no-install-recommends openjdk-8-jdk \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-arm64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 
 RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zx -C /opt/
 ENV PATH "${PATH}:/opt/apache-maven-3.5.4/bin/"
 
 ########## For Hbase building ###################
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.5.1.1.tar.gz | tar zx -C /opt/
-RUN echo /opt/protobuf-3.5.1.1/lib/ > /etc/ld.so.conf.d/protobuf-3.5.1.1.conf
+RUN echo /opt/protobuf-3.5.1.1/lib/ > /etc/ld.so.conf.d/protobuf-3.5.1.1.conf && ldconfig
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-2.5.0.tar.gz | tar zx -C /opt/
-RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf \
-    && ldconfig
+RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfig
 RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zx -C /opt/
 
 ENV PATH "${PATH}:/opt/protobuf-2.5.0/bin/"
