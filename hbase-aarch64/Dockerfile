@@ -30,7 +30,7 @@ RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends software-properties-common \
     && add-apt-repository ppa:openjdk-r/ppa -y \
     && apt-get -q update \
-    && apt-get -q install -y --no-install-recommends openjdk-7-jre \
+    && apt-get -q install -y --no-install-recommends openjdk-7-jdk \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
