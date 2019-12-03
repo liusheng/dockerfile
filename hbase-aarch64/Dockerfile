@@ -1,8 +1,6 @@
-FROM ubuntu:bionic
+FROM ubuntu:xenial
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-RUN echo "deb http://ports.ubuntu.com/ubuntu-ports xenial main" >> /etc/apt/sources.list
 
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
@@ -29,7 +27,8 @@ RUN apt-get -q update \
 #######
 RUN apt-get -q update \
     && apt-get install -f \
-    && add-apt-repository ppa:openjdk-r/ppa \
+    && apt-get -q install -y --no-install-recommends software-properties-common
+    && add-apt-repository ppa:openjdk-r/ppa -y \
     && apt-get -q update \
     && apt-get -q install -y --no-install-recommends openjdk-7-jre \
     && apt-get clean \
