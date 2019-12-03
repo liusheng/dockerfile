@@ -25,10 +25,13 @@ RUN apt-get -q update \
     && rm -rf /var/lib/apt/lists/*
 
 #######
-# OpenJDK 8
+# OpenJDK 7
 #######
 RUN apt-get -q update \
-    && apt-get -q install -y --no-install-recommends openjdk-7-jdk \
+    && apt-get install -f \
+    && add-apt-repository ppa:openjdk-r/ppa \
+    && apt-get -q update \
+    && apt-get -q install -y --no-install-recommends openjdk-7-jre \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
