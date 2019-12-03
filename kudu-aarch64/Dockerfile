@@ -31,6 +31,7 @@ RUN apt-get -q update \
         vim-common \
         make \
         cmake \
+        g++ \
         autoconf \
         automake \
         curl \

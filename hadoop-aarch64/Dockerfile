@@ -84,6 +84,7 @@ RUN git clone https://github.com/google/snappy /opt/snappy \
 
 ########## For Hbase building ###################
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.5.1.1.tar.gz | tar zx -C /opt/
+RUN echo /opt/protobuf-3.5.1.1/lib/ > /etc/ld.so.conf.d/protobuf-3.5.1.1.conf
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-2.5.0.tar.gz | tar zx -C /opt/
 RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf
 RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zx -C /opt/
@@ -121,19 +122,19 @@ RUN mkdir -p ~/.m2/repository/org/apache/ \
 ###
 # Avoid out of memory errors in builds
 ###
-ENV MAVEN_OPTS -Xms256m -Xmx1536m
+ENV MAVEN_OPTS -Xms256m -Xmx1536m -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss
 
 RUN mkdir -p ~/hadoop-logs/
 
-# RUN git clone https://github.com/apache/hadoop \
-#     && cd hadoop \
-#     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-logs/hadoop_build.log
-# ENV PATH "${PATH}:~/hadoop/hadoop-dist/target/hadoop-3.3.0-SNAPSHOT/bin"
-
+ARG prebuild=false
+RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/hadoop \
+    && cd hadoop \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-logs/hadoop_build.log \
+    && export PATH=${PATH}:$(realpath ~/hadoop/hadoop-dist/target/hadoop-*-SNAPSHOT/bin); fi
 
 CMD git clone https://github.com/apache/hadoop \
     && cd hadoop \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-logs/hadoop_build.log \
-    && export PATH=~/hadoop/hadoop-dist/target/hadoop-3.3.0-SNAPSHOT/bin:$PATH \
+    && export PATH=$PATH:$(realpath hadoop-dist/target/hadoop-*-SNAPSHOT/bin/) \
     && cd hadoop-yarn-project/ \
     && mvn test -B -e -fn | tee ~/hadoop-logs/hadoop_yarn_test.log
