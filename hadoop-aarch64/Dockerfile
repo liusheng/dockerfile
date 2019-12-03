@@ -117,24 +117,24 @@ RUN mkdir -p ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.15.1/ \
 # Use pre-compiled hbase artifact
 RUN mkdir -p ~/.m2/repository/org/apache/ \
     && cd ~/.m2/repository/org/apache/ \
-    && curl -sL https://github.com/liusheng/package/releases/download/hbase-artifacts-aarch64/hbase.tar.gz | tar zx
+    && curl -sL https://github.com/liusheng/package/releases/download/hbase-2.0.2-artifacts-aarch64/hbase.tar.gz | tar zx
 
 ###
 # Avoid out of memory errors in builds
 ###
 ENV MAVEN_OPTS -Xms256m -Xmx1536m -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss
 
-RUN mkdir -p ~/hadoop-logs/
+RUN mkdir -p ~/hadoop-results/
 
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/hadoop \
     && cd hadoop \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-logs/hadoop_build.log \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-results/hadoop_build.log \
     && export PATH=${PATH}:$(realpath ~/hadoop/hadoop-dist/target/hadoop-*-SNAPSHOT/bin); fi
 
 CMD git clone https://github.com/apache/hadoop \
     && cd hadoop \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-logs/hadoop_build.log \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | tee ~/hadoop-results/hadoop_build.log \
     && export PATH=$PATH:$(realpath hadoop-dist/target/hadoop-*-SNAPSHOT/bin/) \
     && cd hadoop-yarn-project/ \
-    && mvn test -B -e -fn | tee ~/hadoop-logs/hadoop_yarn_test.log
+    && mvn test -B -e -fn | tee ~/hadoop-results/hadoop_yarn_test.log

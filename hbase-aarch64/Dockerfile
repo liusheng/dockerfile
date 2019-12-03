@@ -67,9 +67,10 @@ WORKDIR /home/hbase
 ###
 ENV MAVEN_OPTS -Xms256m -Xmx1536m -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss
 
-RUN mkdir -p ~/hbase-logs/
+RUN mkdir -p ~/hbase-results/
 
 CMD git clone https://github.com/apache/hbase \
     && cd hbase \
-    && git checkout rel/1.4.8 \
-    && mvn clean package -Prelease -DskipTests 2>&1 | tee ~/hadoop-logs/hadoop_build.log
+    && git checkout rel/2.0.2 \
+    && mvn clean install -DskipTests -Prelease 2>&1 | tee ~/hbase-results/hbase_2.0.2_build.log \
+    && tar zcf ~/hbase-results/hbase.tar.gz ~/.m2/repository/org/apache/hbase
