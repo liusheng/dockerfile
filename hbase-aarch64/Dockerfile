@@ -62,6 +62,8 @@ RUN echo "hbase ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hbase
 WORKDIR /home/hbase
 
+RUN mvn install:install-file -DgroupId=com.google.protobuf -DartifactId=protoc -Dversion=2.5.0 -Dclassifier=linux-aarch_64 -Dpackaging=exe -Dfile=/opt/protobuf-2.5.0/bin/proto
+
 ###
 # Avoid out of memory errors in builds
 ###
