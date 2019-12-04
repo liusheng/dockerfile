@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -53,7 +53,7 @@ RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarc
 RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfig
 RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zx -C /opt/
 
-ENV PATH "${PATH}:/opt/protobuf-2.5.0/bin/"
+ENV PATH "${PATH}:/opt/protobuf-3.5.1.1/bin/"
 ########## For Hbase building ###################
 
 RUN useradd -m -d /home/hbase -s /bin/bash hbase && echo hbase:hbase | chpasswd && adduser hbase sudo
@@ -62,7 +62,7 @@ RUN echo "hbase ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hbase
 WORKDIR /home/hbase
 
-RUN mvn install:install-file -DgroupId=com.google.protobuf -DartifactId=protoc -Dversion=2.5.0 -Dclassifier=linux-aarch_64 -Dpackaging=exe -Dfile=/opt/protobuf-2.5.0/bin/proto
+RUN mvn install:install-file -DgroupId=com.google.protobuf -DartifactId=protoc -Dversion=3.5.1.1 -Dclassifier=linux-aarch_64 -Dpackaging=exe -Dfile=/opt/protobuf-3.5.1.1/bin/proto
 
 ###
 # Avoid out of memory errors in builds
