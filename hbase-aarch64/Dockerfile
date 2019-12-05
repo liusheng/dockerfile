@@ -74,5 +74,5 @@ RUN mkdir -p ~/hbase-results/
 CMD git clone https://github.com/apache/hbase \
     && cd hbase \
     && git checkout rel/2.0.2 \
-    && mvn clean install -DskipTests -Prelease 2>&1 | tee ~/hbase-results/hbase_2.0.2_build.log \
-    && tar zcf ~/hbase-results/hbase.tar.gz -C ~/.m2/repository/org/apache/ hbase/
+    && mvn clean install -DskipTests -Prelease 2>&1 | sudo tee ~/hbase-results/hbase_2.0.2_build.log \
+    && sudo tar zcf ~/hbase-results/hbase.tar.gz -C ~/.m2/repository/org/apache/ hbase/
