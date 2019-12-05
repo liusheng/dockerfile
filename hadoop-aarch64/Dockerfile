@@ -134,6 +134,6 @@ RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/hadoop
 
 CMD if [ ! -d hadoop ]; then git clone https://github.com/apache/hadoop; fi \
     && cd hadoop \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip -Djetty.version=9.3.19.v20170502 2>&1 | tee ~/hadoop-results/hadoop_build.log \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dhbase.profile=2.0 -Dmaven.javadoc.skip -Djetty.version=9.3.19.v20170502 2>&1 | tee ~/hadoop-results/hadoop_build.log \
     && export PATH=$PATH:$(realpath hadoop-dist/target/hadoop-*-SNAPSHOT/bin/) \
-    && mvn test -B -e -Djetty.version=9.3.19.v20170502 -fn | tee ~/hadoop-results/hadoop_all_test.log
+    && mvn test -B -e -Dhbase.profile=2.0 -Djetty.version=9.3.19.v20170502 -fn | tee ~/hadoop-results/hadoop_all_test.log
