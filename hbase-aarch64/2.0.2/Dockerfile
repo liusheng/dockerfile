@@ -57,6 +57,7 @@ ENV MAVEN_OPTS -Xms256m -Xmx1536m -Dorg.slf4j.simpleLogger.showDateTime=true -Do
 
 RUN mkdir -p ~/hbase-results/
 
+# -Prelease will package shaded jars
 CMD git clone https://github.com/apache/hbase \
     && cd hbase \
     && git checkout rel/2.0.2 \
