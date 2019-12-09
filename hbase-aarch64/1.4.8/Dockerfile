@@ -1,9 +1,10 @@
 FROM liusheng2048/hbase-2.0.2-aarch64
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV PATH  "/opt/protobuf-2.5.0/bin/:${PATH}"
+
 # -Prelease will package shaded jars
-RUN sudo source /etc/environment
-
-ENV PATH  "${PATH}:/opt/apache-maven-3.5.4/bin/:/opt/protobuf-2.5.0/bin/"
-
 CMD git clone https://github.com/apache/hbase \
     && cd hbase \
     && git checkout rel/1.4.8 \
