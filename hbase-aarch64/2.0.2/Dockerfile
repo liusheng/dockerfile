@@ -22,20 +22,6 @@ RUN apt-get -q update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-#######
-# OpenJDK 7
-#######
-# RUN apt-get -q update \
-#     && apt-get install -f \
-#     && apt-get -q install -y --no-install-recommends software-properties-common \
-#     && add-apt-repository ppa:openjdk-r/ppa -y \
-#     && apt-get -q update \
-#     && apt-get -q install -y --no-install-recommends openjdk-7-jdk \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
-#
-# ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-arm64
-
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends openjdk-8-jdk \
     && apt-get clean \
@@ -75,4 +61,5 @@ CMD git clone https://github.com/apache/hbase \
     && cd hbase \
     && git checkout rel/2.0.2 \
     && mvn clean install -DskipTests -Prelease 2>&1 | sudo tee ~/hbase-results/hbase_2.0.2_build.log \
-    && sudo tar zcf ~/hbase-results/hbase.tar.gz -C ~/.m2/repository/org/apache/ hbase/
+    && sudo tar zcf ~/hbase-results/hbase-2.0.2-artifacts.tar.gz -C ~/.m2/repository/org/apache/ hbase/
+
