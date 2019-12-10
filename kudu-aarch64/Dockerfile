@@ -43,4 +43,12 @@ RUN apt-get -q update \
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 
-RUN git clone https://github.com/apache/kudu
+RUN git clone https://github.com/apache/kudu \
+    && cd kudu \
+    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/8118b0c08c86b11a4e6e2e92bd274b04cd4635ea/patch-patch-kudu-support-aarch64.patch \
+    && patch -p0 < patch-patch-kudu-support-aarch64.patch \
+    && mkdir -p build/debug \
+    && cd build/debug \
+    && cmake ../.. \
+    && make -j4
+
