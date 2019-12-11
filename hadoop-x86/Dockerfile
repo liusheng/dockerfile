@@ -103,4 +103,4 @@ CMD if [ ! -d hadoop ]; then git clone https://github.com/apache/hadoop; fi \
     && cd hadoop \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hadoop-results/hadoop_build.log \
     && export PATH=$PATH:$(realpath hadoop-dist/target/hadoop-*-SNAPSHOT/bin/) \
-    && mvn test -B -e -Dhbase.profile=2.0 -Djetty.version=9.3.19.v20170502 -fn | sudo tee ~/hadoop-results/hadoop_all_test.log
+    && mvn test -B -e -fn | sudo tee ~/hadoop-results/hadoop_all_test.log
