@@ -43,7 +43,7 @@ RUN apt-get -q update \
         python-wheel \
         rsync \
         software-properties-common \
-        snappy \
+        cmake \
         sudo \
         valgrind \
         zlib1g-dev \
