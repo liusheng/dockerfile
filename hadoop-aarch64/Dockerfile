@@ -20,7 +20,6 @@ RUN apt-get -q update \
         libssl-dev \
         libssl1.0.0 \
         libsasl2-dev \
-        libsnappy-dev \
         bats \
         curl \
         sudo \
