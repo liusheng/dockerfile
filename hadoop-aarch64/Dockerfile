@@ -68,7 +68,7 @@ ENV PATH "${PATH}:/opt/protobuf-3.7.1/bin"
 
 
 # phantomjs 2.1.1 require libicu55 which only in ubuntu xenial
-RUN echo "deb http://ports.ubuntu.com/ubuntu-ports xenial main" >> /etc/apt/sources.list
+RUN echo "deb http://ports.ubuntu.com/ubuntu-ports xenial main universe" >> /etc/apt/sources.list
 RUN apt-get -q update \
     &&	apt-get -q install -y libicu55 \
     && apt-get clean \
@@ -76,11 +76,23 @@ RUN apt-get -q update \
 RUN curl -sL https://github.com/liusheng/phantomjs/releases/download/2.1.1/phantomjs-2.1.1-linux-aarch64.tar.bz2 | tar xj -C /tmp/ \
     && cp /tmp/phantomjs-2.1.1-linux-aarch64/bin/phantomjs /usr/bin/
 
-RUN git clone https://github.com/google/snappy /opt/snappy \
-    && cd /opt/snappy \
-    && mkdir build \
-    && cd build/ && cmake ../ && make \
-    && make install
+# The manaually compiled snappy seems has issues that break the related tests
+#org.apache.hadoop.io.compress.TestCompressorDecompressor.testCompressorDecompressor
+#org.apache.hadoop.io.compress.TestCompressorDecompressor.testCompressorDecompressorWithExeedBufferLimit
+#org.apache.hadoop.io.compress.snappy.TestSnappyCompressorDecompressor.testSnappyCompressDecompressInMultiThreads
+#org.apache.hadoop.io.compress.snappy.TestSnappyCompressorDecompressor.testSnappyCompressDecompress
+#RUN git clone https://github.com/google/snappy /opt/snappy \
+#    && cd /opt/snappy \
+#    && mkdir build \
+#    && cd build/ && cmake ../ && make \
+#    && make install
+
+RUN apt-get -q update \
+    &&	apt-get -q install -y libsnappy1v5=1.1.3-2 \
+         libsnappy-dev=1.1.3-2 \
+         snappy \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ########## For Hbase building ###################
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.5.1.1.tar.gz | tar zx -C /opt/
