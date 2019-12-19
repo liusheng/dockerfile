@@ -44,9 +44,18 @@ RUN apt-get -q update \
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 WORKDIR /opt
 
+ARG prebuild=false
+RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/kudu \
+    && cd kudu \
+    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/ae78e0f789f8b54667768b8b4982e1c97e5ac4a4/patch-patch-kudu-support-aarch64.patch \
+    && patch -p0 < patch-patch-kudu-support-aarch64.patch \
+    && mkdir -p build/debug \
+    && cd build/debug \
+    && cmake ../..; fi
+
 CMD git clone https://github.com/apache/kudu \
     && cd kudu \
-    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/ea144f673a25ecd4030fbe99837962e8aad4139b/patch-patch-kudu-support-aarch64.patch \
+    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/ae78e0f789f8b54667768b8b4982e1c97e5ac4a4/patch-patch-kudu-support-aarch64.patch \
     && patch -p0 < patch-patch-kudu-support-aarch64.patch \
     && mkdir -p build/debug \
     && cd build/debug \
