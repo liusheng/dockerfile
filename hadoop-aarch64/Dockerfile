@@ -118,13 +118,6 @@ RUN curl -sL https://github.com/liusheng/package/releases/download/netty-all/net
 
 RUN sudo echo "umask 022" >> ~/.profile
 
-# Install protoc-gen-grpc-java for ARM platform
-RUN mkdir -p ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.15.1/ \
-    && cd ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.15.1/ \
-    && curl -L -O -s -S http://home.apache.org/~aajisaka/repository/io/grpc/protoc-gen-grpc-java/1.15.1/protoc-gen-grpc-java-1.15.1-linux-aarch_64.exe \
-    && curl -L -O -s -S http://home.apache.org/~aajisaka/repository/io/grpc/protoc-gen-grpc-java/1.15.1/protoc-gen-grpc-java-1.15.1.pom \
-    && curl -L -O -s -S http://home.apache.org/~aajisaka/repository/io/grpc/protoc-gen-grpc-java/1.15.1/protoc-gen-grpc-java-1.15.1.pom.sha1
-
 # Use pre-compiled hbase artifact
 RUN mkdir -p ~/.m2/repository/org/apache/ \
     && cd ~/.m2/repository/org/apache/ \
