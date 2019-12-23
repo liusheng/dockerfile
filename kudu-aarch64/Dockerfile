@@ -47,16 +47,12 @@ WORKDIR /opt
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/kudu \
     && cd kudu \
-    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/58216b3f0c4a496e37de652a59005409b616bdcb/patch-patch-kudu-support-aarch64.patch \
-    && patch -p0 < patch-patch-kudu-support-aarch64.patch \
     && mkdir -p build/debug \
     && cd build/debug \
     && cmake ../..; fi
 
 CMD git clone https://github.com/apache/kudu \
     && cd kudu \
-    && curl -O -L https://gist.githubusercontent.com/liusheng/58c39f4f4c84a5a238e49a086eaea664/raw/58216b3f0c4a496e37de652a59005409b616bdcb/patch-patch-kudu-support-aarch64.patch \
-    && patch -p0 < patch-patch-kudu-support-aarch64.patch \
     && mkdir -p build/debug \
     && cd build/debug \
     && cmake ../.. \
