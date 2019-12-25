@@ -119,9 +119,9 @@ RUN curl -sL https://github.com/liusheng/package/releases/download/netty-all/net
 RUN sudo echo "umask 022" >> ~/.profile
 
 # Use pre-compiled hbase artifact
-RUN mkdir -p ~/.m2/repository/org/apache/ \
-    && cd ~/.m2/repository/org/apache/ \
-    && curl -sL https://github.com/liusheng/package/releases/download/hbase-2.0.2-artifacts-aarch64/hbase.tar.gz | tar zx
+#RUN mkdir -p ~/.m2/repository/org/apache/ \
+#    && cd ~/.m2/repository/org/apache/ \
+#    && curl -sL https://github.com/liusheng/package/releases/download/hbase-2.0.2-artifacts-aarch64/hbase.tar.gz | tar zx
 
 ###
 # Avoid out of memory errors in builds
