@@ -7,23 +7,12 @@ RUN apt-get -q update \
         curl \
         sudo \
         git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-#######
-# OpenJDK 8
-#######
-RUN apt-get -q update \
-    && apt-get -q install -y --no-install-recommends openjdk-8-jdk \
+        openjdk-8-jdk \
+        maven \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
-
-RUN apt-get -q update \
-    &&	apt-get -q install -y maven \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-2.5.0.tar.gz | tar zx -C /opt/
 RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfig
