@@ -1,3 +1,5 @@
+# docker run -p 8088:8088 -it liusheng2048/deploy-hadoop bash
+
 FROM liusheng2048/hadoop-aarch64:pre-build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -35,7 +37,13 @@ COPY yarn-site.xml /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 # I have no idea about this
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hadoop-env.sh
 
+EXPOSE 8088
+
 COPY entrypoint.sh /home/hadoop/
 
 ENTRYPOINT /home/hadoop/entrypoint.sh && bash
 
+CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.0-SNAPSHOT.jar \
+    && hadoop jar $example_jar teragen -Dmapred.map.tasks=100 100000 terasort/1T-input \
+    && hadoop fs -ls /user/hadoop/terasort/ \
+    && hadoop jar $example_jar teravalidate /user/hadoop/terasort/1T-output /user/hadoop/terasort/1T-validate
