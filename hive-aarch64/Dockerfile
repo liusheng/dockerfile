@@ -35,11 +35,13 @@ RUN mkdir -p ~/hive-results/
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/hive \
     && cd hive \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hive-results/hive_build.log \
+    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/hive/pull/5.patch | git apply  --index \
+    && mvn clean install -e -B -Pdist -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hive-results/hive_build.log \
     && export PATH=${PATH}:$(realpath ~/hive/hive-dist/target/hive-*-SNAPSHOT/bin); fi
 
 CMD if [ ! -d hive ]; then git clone https://github.com/apache/hive; fi \
     && cd hive \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hive-results/hive_build.log \
+    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/hive/pull/5.patch | git apply  --index \
+    && mvn clean install -e -B -Pdist -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hive-results/hive_build.log \
     && export PATH=$PATH:$(realpath hive-dist/target/hive-*-SNAPSHOT/bin/) \
     && mvn test -B -e -fn | sudo tee ~/hive-results/hive_all_test.log
