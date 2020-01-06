@@ -18,22 +18,8 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
 
-RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/core-site.xml{,-bak} \
-    && cat << EOF >> /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/core-site.xml
-          <configuration>
-            <property>
-              <name>fs.defaultFS</name>
-              <value>hdfs://localhost:9000</value>
-            </property>
-          </configuration>
-       EOF
+RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/core-site.xml{,-bak}
+COPY core-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 
 RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hdfs-site.xml{,-bak} \
-    && cat << EOF >> /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hdfs-site.xml
-          <configuration>
-            <property>
-              <name>dfs.replication</name>
-              <value>1</value>
-            </property>
-          </configuration>
-       EOF
+COPY hdfs-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
