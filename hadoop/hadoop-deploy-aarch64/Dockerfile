@@ -32,4 +32,10 @@ COPY mapred-site.xml /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 RUN cp ~/hadoop-3.3.0-SNAPSHOT/etc/hadoop/yarn-site.xml{,-bak}
 COPY yarn-site.xml /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 
-ENTRYPOINT entrypoint.sh
+# I have no idea about this
+RUN echo "export JAVA_HOME=${JAVA_HOME}" > /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hadoop-env.sh
+
+COPY entrypoint.sh /home/hadoop/
+
+ENTRYPOINT /home/hadoop/entrypoint.sh && bash
+
