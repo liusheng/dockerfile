@@ -24,6 +24,12 @@ COPY core-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hdfs-site.xml{,-bak}
 COPY hdfs-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 
+RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/mapred-site.xml{,-bak}
+COPY mapred-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
+
+RUN cp /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/yarn-site.xml{,-bak}
+COPY yarn-site.xml /opt/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
+
 USER hadoop
 RUN hdfs namenode -format \
     && /opt/hadoop-3.3.0-SNAPSHOT/sbin/start-dfs.sh \
