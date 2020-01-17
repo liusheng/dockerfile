@@ -38,18 +38,16 @@ RUN apt-get -q update \
         flex \
         gdb \
         git \
+        lsof \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 WORKDIR /opt
 
-ARG prebuild=false
-RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/kudu \
-    && cd kudu \
-    && mkdir -p build/debug \
-    && cd build/debug \
-    && cmake ../..; fi
+ARG build3rddeps=true
+RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/kudu -b aarch64-support \
+    && bash -ex kudu/thirdparty/build-if-necessary.sh; fi
 
 CMD git clone https://github.com/apache/kudu \
     && cd kudu \
