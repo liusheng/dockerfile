@@ -22,7 +22,7 @@ RUN apt-get -q update \
         ruby-dev \
         xsltproc \
         zlib1g-dev \
-        openjdk-11-jdk \
+        openjdk-8-jdk \
         patch \
         pkg-config \
         python \
@@ -42,7 +42,7 @@ RUN apt-get -q update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 WORKDIR /opt
 
 ARG build3rddeps=true
