@@ -47,12 +47,10 @@ WORKDIR /opt
 
 ARG build3rddeps=true
 RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/kudu -b aarch64-support \
-    && bash -ex kudu/thirdparty/build-if-necessary.sh; fi
-
-CMD git clone https://github.com/apache/kudu \
     && cd kudu \
-    && mkdir -p build/debug \
-    && cd build/debug \
-    && cmake ../.. \
-    && make -j4
+    && bash -ex thirdparty/build-if-necessary.sh; fi
+
+COPY entrypoint.sh /opt/
+
+ENTRYPOINT /opt/entrypoint.sh
 
