@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #cd /opt/kudu
 #git pull
 
@@ -19,9 +18,10 @@ iwyu)
   make iwyu 2>&1 | tee /opt/results/iwyu/iwyu.log
   ;;
 debug)
-  mkdir -p /opt/results/debug/
+  mkdir -p /opt/results/debug
   mkdir -p /opt/kudu/build/debug
   cd /opt/kudu/build/debug
+  cmake ../..
   make -j8 2>&1 | tee mkdir -p /opt/results/debug/build.log
   ctest -j8 2>&1 | tee /opt/results/debug/test_console.log
   cp -r /opt/kudu/build/debug/test-logs/ /opt/results/debug/
@@ -49,7 +49,6 @@ asan)
   ;;
 tsan)
   mkdir -p /opt/results/tsan/
-
   mkdir -p /opt/kudu/build/tsan
   cd /opt/kudu/build/tsan
   CC=../../thirdparty/clang-toolchain/bin/clang \
@@ -61,5 +60,6 @@ tsan)
   cp -r /opt/kudu/build/tsan/test-logs/ /opt/results/tsan/
   ;;
 *)
-  exec $@
+  exec "$@"
+  ;;
 esac
