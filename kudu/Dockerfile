@@ -51,6 +51,7 @@ RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/
     && bash -ex thirdparty/build-if-necessary.sh; fi
 
 COPY entrypoint.sh /opt/
+RUN chmod +x /opt/entrypoint.sh
 
-ENTRYPOINT /opt/entrypoint.sh
+ENTRYPOINT ["/opt/entrypoint.sh"]
 
