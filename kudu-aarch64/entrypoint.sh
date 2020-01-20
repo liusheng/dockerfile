@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 #cd /opt/kudu
 #git pull
 
@@ -7,15 +7,15 @@ lint)
   mkdir -p /opt/results/lint/
   mkdir -p /opt/kudu/build/lint
   cd /opt/kudu/build/lint
-  cmake ../.. | tee /opt/results/lint/cmake.log
-  make ilint 2>&1 | tee /opt/results/lint/lint.log
+  cmake ../.. | tee -a /opt/results/lint/console.log
+  make ilint | tee -a /opt/results/lint/console.log
   ;;
 iwyu)
   mkdir -p /opt/results/iwyu/
   mkdir -p /opt/kudu/build/iwyu
   cd /opt/kudu/build/iwyu
-  cmake ../.. 2>&1 | tee /opt/results/iwyu/cmake.log
-  make iwyu 2>&1 | tee /opt/results/iwyu/iwyu.log
+  cmake ../.. 2>&1 | tee -a /opt/results/iwyu/console.log
+  make iwyu 2>&1 | tee -a /opt/results/iwyu/console.log
   ;;
 debug)
   mkdir -p /opt/results/debug
