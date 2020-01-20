@@ -21,9 +21,9 @@ debug)
   mkdir -p /opt/results/debug
   mkdir -p /opt/kudu/build/debug
   cd /opt/kudu/build/debug
-  cmake ../..
-  make -j8 2>&1 | tee mkdir -p /opt/results/debug/build.log
-  ctest -j8 2>&1 | tee /opt/results/debug/test_console.log
+  cmake ../.. | tee -a /opt/results/debug/console.log
+  make -j8 2>&1 | tee -a /opt/results/debug/console.log
+  ctest -j8 2>&1 | tee -a /opt/results/debug/console.log
   cp -r /opt/kudu/build/debug/test-logs/ /opt/results/debug/
   ;;
 release)
@@ -32,8 +32,8 @@ release)
   cd /opt/kudu/build/release
   ../../build-support/enable_devtoolset.sh \
   ../../thirdparty/installed/common/bin/cmake \
-  -DCMAKE_BUILD_TYPE=release ../..
-  make -j8 2>&1 | tee mkdir -p /opt/results/release/build.log
+  -DCMAKE_BUILD_TYPE=release ../.. | tee -a /opt/results/release/console.log
+  make -j8 2>&1 | tee -a /opt/results/release/console.log
   ;;
 asan)
   mkdir -p /opt/results/asan/
@@ -42,9 +42,9 @@ asan)
   CC=../../thirdparty/clang-toolchain/bin/clang \
   CXX=../../thirdparty/clang-toolchain/bin/clang++ \
   ../../thirdparty/installed/common/bin/cmake \
-  -DKUDU_USE_ASAN=1 ../..
-  make -j8 2>&1 | tee /opt/results/asan/build.log
-  ctest -j8 2>&1 | tee /opt/results/asan/test_console.log
+  -DKUDU_USE_ASAN=1 ../.. | tee -a /opt/results/asan/console.log
+  make -j8 2>&1 | tee -a /opt/results/asan/console.log
+  ctest -j8 2>&1 | tee -a /opt/results/asan/console.log
   cp -r /opt/kudu/build/asan/test-logs/ /opt/results/asan/
   ;;
 tsan)
@@ -54,9 +54,9 @@ tsan)
   CC=../../thirdparty/clang-toolchain/bin/clang \
   CXX=../../thirdparty/clang-toolchain/bin/clang++ \
   ../../thirdparty/installed/common/bin/cmake \
-  -DKUDU_USE_TSAN=1 ../..
-  make -j8 2>&1 | tee /opt/results/tsan/build.log
-  ctest -j8 2>&1 | tee /opt/results/tsan/test_console.log
+  -DKUDU_USE_TSAN=1 ../.. | tee -a /opt/results/tsan/console.log
+  make -j8 2>&1 | tee -a /opt/results/tsan/console.log
+  ctest -j8 2>&1 | tee -a /opt/results/tsan/console.log
   cp -r /opt/kudu/build/tsan/test-logs/ /opt/results/tsan/
   ;;
 *)
