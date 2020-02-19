@@ -26,6 +26,9 @@ RUN apt-get -q update \
         patch \
         pkg-config \
         python \
+        python3 \
+        python3-pip \
+        virtualenv \
         rsync \
         unzip \
         vim-common \
@@ -46,8 +49,11 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 WORKDIR /opt
 
 ARG build3rddeps=true
-RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/kudu -b aarch64-support \
+RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/kudu \
     && cd kudu \
+    && git checkout -b aarch64-support \
+    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch \
+    && git am aarch64-support.patch \
     && bash -ex thirdparty/build-if-necessary.sh; fi
 
 COPY entrypoint.sh /opt/

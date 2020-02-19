@@ -1,10 +1,15 @@
 #!/bin/bash -ex
 cd /opt/kudu
-git remote add upstream https://github.com/apache/kudu
-git fetch upstream master
-git fetch origin aarch64-support
+
+# use latest patch
 git config --global user.email "nobody@example.com"
 git config --global user.name "nobody"
+git checkout master
+git pull
+git branch -D aarch64-support
+git checkout -b aarch64-support
+curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch
+git am aarch64-support.patch
 git rebase upstream/master
 
 case $1 in
