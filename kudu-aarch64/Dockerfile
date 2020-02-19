@@ -51,6 +51,8 @@ WORKDIR /opt
 ARG build3rddeps=true
 RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/kudu \
     && cd kudu \
+    && git config --global user.email "nobody@example.com" \
+    && git config --global user.name "nobody" \
     && git checkout -b aarch64-support \
     && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch \
     && git am aarch64-support.patch \
