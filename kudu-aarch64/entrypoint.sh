@@ -10,7 +10,7 @@ git branch -D aarch64-support
 git checkout -b aarch64-support
 curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch
 git am aarch64-support.patch
-git rebase upstream/master
+git rebase master
 
 case $1 in
 lint)
