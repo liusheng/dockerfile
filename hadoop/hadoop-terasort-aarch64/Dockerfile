@@ -1,5 +1,7 @@
 # docker run -p 8088:8088 -it liusheng2048/deploy-hadoop bash
 
+# For x86 testing
+# FROM liusheng2048/hadoop-x86:pre-build
 FROM liusheng2048/hadoop-aarch64:pre-build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
