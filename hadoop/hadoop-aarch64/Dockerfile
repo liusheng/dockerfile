@@ -130,6 +130,7 @@ ENV MAVEN_OPTS -Xms256m -Xmx1536m -Dorg.slf4j.simpleLogger.showDateTime=true -Do
 
 RUN mkdir -p ~/hadoop-results/
 
+# docker build . -t liusheng2048/hadoop-aarch64:pre-build --build-arg prebuild=true
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/hadoop \
     && cd hadoop \
