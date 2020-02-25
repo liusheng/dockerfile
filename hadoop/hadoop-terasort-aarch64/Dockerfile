@@ -45,7 +45,7 @@ EXPOSE 8088
 
 COPY entrypoint.sh /home/hadoop/
 
-ENTRYPOINT /home/hadoop/entrypoint.sh
+ENTRYPOINT ["/home/hadoop/entrypoint.sh"]
 
 # one row of terasort data is 100B size, we are testing with 5GB data, 5*1024*1024*1024/100=53896806
 CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.0-SNAPSHOT.jar \
