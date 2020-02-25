@@ -1,4 +1,4 @@
-# docker run -p 8088:8088 -it liusheng2048/deploy-hadoop bash
+# docker run -p 8088:8088 -it liusheng2048/hadoop-terasort-aarch64 bash
 
 # For x86 testing
 # FROM liusheng2048/hadoop-x86:pre-build
@@ -39,14 +39,15 @@ COPY yarn-site.xml /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/
 # I have no idea about this
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /home/hadoop/hadoop-3.3.0-SNAPSHOT/etc/hadoop/hadoop-env.sh
 
+RUN mkdir -p /tmp/hadoop-terasort/
+
 EXPOSE 8088
 
 COPY entrypoint.sh /home/hadoop/
 
-ENTRYPOINT /home/hadoop/entrypoint.sh && bash
+ENTRYPOINT /home/hadoop/entrypoint.sh
 
 # one row of terasort data is 100B size, we are testing with 5GB data, 5*1024*1024*1024/100=53896806
-RUN mkdir -p /tmp/hadoop-terasort/
 CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.0-SNAPSHOT.jar \
     && hadoop jar $example_jar teragen -Dmapred.map.tasks=100 53896806 terasort/tera1-input \
     && hadoop fs -ls /user/hadoop/terasort/ \
@@ -54,3 +55,5 @@ CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-ex
     && hadoop fs -ls /user/hadoop/terasort/ \
     && hadoop jar $example_jar teravalidate /user/hadoop/terasort/tera1-output /user/hadoop/terasort/tera1-validate \
     2>&1 | sudo tee /tmp/hadoop-terasort/console.log
+
+# docker run -p 8088:8088 -v /tmp/hadoop-terasort/:/tmp/hadoop-terasort/ liusheng2048/hadoop-terasort-x86
