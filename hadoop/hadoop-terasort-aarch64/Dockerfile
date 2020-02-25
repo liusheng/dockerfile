@@ -46,9 +46,11 @@ COPY entrypoint.sh /home/hadoop/
 ENTRYPOINT /home/hadoop/entrypoint.sh && bash
 
 # one row of terasort data is 100B size, we are testing with 5GB data, 5*1024*1024*1024/100=53896806
+RUN mkdir -p /tmp/hadoop-terasort/
 CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.0-SNAPSHOT.jar \
     && hadoop jar $example_jar teragen -Dmapred.map.tasks=100 53896806 terasort/tera1-input \
     && hadoop fs -ls /user/hadoop/terasort/ \
     && hadoop jar $example_jar terasort -Dmapred.reduce.tasks=50 terasort/tera1-input terasort/tera1-output\
     && hadoop fs -ls /user/hadoop/terasort/ \
-    && hadoop jar $example_jar teravalidate /user/hadoop/terasort/tera1-output /user/hadoop/terasort/tera1-validate
+    && hadoop jar $example_jar teravalidate /user/hadoop/terasort/tera1-output /user/hadoop/terasort/tera1-validate \
+    2>&1 | sudo tee /tmp/hadoop-terasort/console.log
