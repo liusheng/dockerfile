@@ -42,6 +42,7 @@ RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /home/hadoop/hadoop-3.3.0-SNAPSHOT/e
 EXPOSE 8088
 
 COPY entrypoint.sh /home/hadoop/
+RUN chmod +x /home/hadoop/entrypoint.sh
 
 ENTRYPOINT /home/hadoop/entrypoint.sh && bash
 
