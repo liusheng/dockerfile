@@ -56,4 +56,5 @@ CMD example_jar=hadoop-3.3.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-ex
     && hadoop jar $example_jar teravalidate /user/hadoop/terasort/tera1-output /user/hadoop/terasort/tera1-validate \
     2>&1 | sudo tee /tmp/hadoop-terasort/console.log
 
-# docker run -p 8088:8088 -v /tmp/hadoop-terasort/:/tmp/hadoop-terasort/ liusheng2048/hadoop-terasort-x86
+# docker run -p 8088:8088 -v /tmp/hadoop-terasort/:/tmp/hadoop-terasort/ --name hadoop-terasort-1 -d liusheng2048/hadoop-terasort-x86
+# docker logs hadoop-terasort-1
