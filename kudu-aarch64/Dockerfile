@@ -26,6 +26,7 @@ RUN apt-get -q update \
         patch \
         pkg-config \
         python \
+        python-dev \
         python3 \
         python3-pip \
         virtualenv \
