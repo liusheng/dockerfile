@@ -35,6 +35,7 @@ RUN apt-get -q update \
 
 RUN curl -L https://get.rvm.io | bash -s stable --autolibs=enabled && source ~/.profile
 RUN pip install mock
+RUN pip3 install mock
 
 #######
 # OpenJDK 8
