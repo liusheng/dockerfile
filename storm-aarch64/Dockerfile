@@ -63,12 +63,11 @@ ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/storm \
     && cd storm \
     && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build.log \
+    && mvn clean install -e -B -Pdist,native -Dtar -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build_test.log \
     && export PATH=${PATH}:$(realpath ~/storm/storm-dist/target/storm-*-SNAPSHOT/bin); fi
 
 CMD if [ ! -d storm ]; then git clone https://github.com/apache/storm; fi \
     && cd storm \
     && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build.log \
+    && mvn clean install -e -B -Pdist,native -Dtar -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build_test.log \
     && export PATH=$PATH:$(realpath storm-dist/target/storm-*-SNAPSHOT/bin/) \
-    && mvn test -B -e -fn | sudo tee ~/storm-results/storm_all_test.log
