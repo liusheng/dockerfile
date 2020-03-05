@@ -27,6 +27,7 @@ RUN apt-get -q update \
         python \
         python-dev \
         python-pip \
+        python3 \
         nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
