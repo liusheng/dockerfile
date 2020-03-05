@@ -24,8 +24,14 @@ RUN apt-get -q update \
         curl \
         sudo \
         git \
+        python \
+        python-dev \
+        python-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -L https://get.rvm.io | bash -s stable --autolibs=enabled && source ~/.profile
+RUN pip install mock
 
 #######
 # OpenJDK 8
@@ -47,9 +53,21 @@ RUN echo "storm ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER storm
 WORKDIR /home/storm
 
+RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.26.1/install.sh | bash && source ~/.bashrc
+
+RUN mkdir -p ~/storm-results/
+
 # docker build . -t liusheng2048/storm-aarch64:pre-build --build-arg prebuild=true
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/storm \
     && cd storm \
+    && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build.log \
     && export PATH=${PATH}:$(realpath ~/storm/storm-dist/target/storm-*-SNAPSHOT/bin); fi
+
+CMD if [ ! -d storm ]; then git clone https://github.com/apache/storm; fi \
+    && cd storm \
+    && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/storm-results/storm_build.log \
+    && export PATH=$PATH:$(realpath storm-dist/target/storm-*-SNAPSHOT/bin/) \
+    && mvn test -B -e -fn | sudo tee ~/storm-results/storm_all_test.log
