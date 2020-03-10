@@ -12,6 +12,9 @@ curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch
 git am aarch64-support.patch
 git rebase master
 
+# The Java tests need 'JAVA8_HOME' env varq
+export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64
+
 case $1 in
 lint)
   mkdir -p /opt/results/lint
