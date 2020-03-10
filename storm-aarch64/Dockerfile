@@ -66,10 +66,9 @@ ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/storm \
     && cd storm \
     && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn clean install -e -B 2>&1 | sudo tee -a ~/storm-results/storm_build_test.log
+    && mvn clean install -e -B 2>&1 |tee -a ~/storm-results/storm_build_test.log; fi
 
 CMD if [ ! -d storm ]; then git clone https://github.com/apache/storm; fi \
     && cd storm \
     && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn clean install -e -B -Dtar 2>&1 | sudo tee -a ~/storm-results/storm_build_test.log \
-    && mvn test -e -B 2>&1 | sudo tee -a ~/storm-results/storm_build_test.log
+    && mvn clean install test -e -B -Dtar 2>&1 |tee -a ~/storm-results/storm_build_test.log
