@@ -48,6 +48,7 @@ RUN apt-get -q update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
+ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-arm64
 WORKDIR /opt
 
 ARG build3rddeps=true
