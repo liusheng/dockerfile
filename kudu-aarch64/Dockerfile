@@ -57,7 +57,7 @@ RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/ku
     && git config --global user.email "nobody@example.com" \
     && git config --global user.name "nobody" \
     && git checkout -b aarch64-support \
-    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch \
+    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/7.patch -o aarch64-support.patch \
     && git am aarch64-support.patch \
     && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
 

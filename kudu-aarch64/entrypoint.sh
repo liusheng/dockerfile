@@ -8,7 +8,7 @@ git checkout master
 git pull
 git branch -D aarch64-support
 git checkout -b aarch64-support
-curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/2.patch -o aarch64-support.patch
+curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/7.patch -o aarch64-support.patch
 git am aarch64-support.patch
 git rebase master
 
