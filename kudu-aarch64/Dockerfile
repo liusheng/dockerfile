@@ -67,7 +67,7 @@ RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/ku
     && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
 
 COPY entrypoint.sh /home/kudu/
-RUN chmod +x /home/kudu/entrypoint.sh
+RUN sudo chmod +x /home/kudu/entrypoint.sh
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
 
