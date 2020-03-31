@@ -44,6 +44,7 @@ RUN apt-get -q update \
         gdb \
         git \
         lsof \
+        sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
