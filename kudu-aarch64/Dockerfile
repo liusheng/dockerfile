@@ -49,7 +49,12 @@ RUN apt-get -q update \
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-arm64
-WORKDIR /opt
+
+# use non-root  user
+RUN useradd -m -d /home/kudu -s /bin/bash kudu && echo kudu:kudu | chpasswd && adduser kudu sudo
+RUN echo "kudu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER kudu
+WORKDIR /home/kudu
 
 ARG build3rddeps=true
 RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/kudu \
@@ -61,8 +66,8 @@ RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/ku
     && git am aarch64-support.patch \
     && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
 
-COPY entrypoint.sh /opt/
-RUN chmod +x /opt/entrypoint.sh
+COPY entrypoint.sh /home/kudu/
+RUN chmod +x /home/kudu/entrypoint.sh
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
 
