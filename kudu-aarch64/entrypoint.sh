@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-cd ~/kudu/
+[ -d ~/kudu ] && cd ~/kudu/
 
 # use latest patch
 #git config --global user.email "nobody@example.com"
