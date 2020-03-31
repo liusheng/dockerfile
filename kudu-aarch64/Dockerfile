@@ -70,5 +70,5 @@ RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/ku
 COPY entrypoint.sh /home/kudu/
 RUN sudo chmod +x /home/kudu/entrypoint.sh
 
-ENTRYPOINT ["/opt/entrypoint.sh"]
+ENTRYPOINT ["/home/kudu/entrypoint.sh"]
 
