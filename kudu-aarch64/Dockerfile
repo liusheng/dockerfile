@@ -58,9 +58,11 @@ USER kudu
 WORKDIR /home/kudu
 
 ARG build3rddeps=true
-RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/kudu \
+ARG repo_src=liusheng
+ARG pr_num=8
+RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/$repo_src/kudu \
     && cd kudu \
-    && git fetch origin pull/8/head:build-on-aarch64 \
+    && git fetch origin pull/$pr_num/head:build-on-aarch64 \
     && git checkout build-on-aarch64 \
     && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
 
