@@ -1,16 +1,10 @@
 #!/bin/bash -ex
 [ -d ~/kudu ] && cd ~/kudu/
 
-# use latest patch
-#git config --global user.email "nobody@example.com"
-#git config --global user.name "nobody"
-#git checkout master
-#git pull
-#git branch -D aarch64-support
-#git checkout -b aarch64-support
-#curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/7.patch -o aarch64-support.patch
-#git am aarch64-support.patch
-#git rebase master
+#git clone https://github.com/liusheng/kudu
+#cd kudu
+#git fetch origin pull/8/head:build-on-aarch64
+#git checkout build-on-aarch64
 
 # The Java tests need 'JAVA8_HOME' env varq
 export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64

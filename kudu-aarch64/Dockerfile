@@ -58,13 +58,10 @@ USER kudu
 WORKDIR /home/kudu
 
 ARG build3rddeps=true
-RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/kudu \
+RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/liusheng/kudu \
     && cd kudu \
-    && git config --global user.email "nobody@example.com" \
-    && git config --global user.name "nobody" \
-    && git checkout -b aarch64-support \
-    && curl -sL https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/7.patch -o aarch64-support.patch \
-    && git am aarch64-support.patch \
+    && git fetch origin pull/8/head:build-on-aarch64 \
+    && git checkout build-on-aarch64 \
     && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
 
 COPY entrypoint.sh /home/kudu/
