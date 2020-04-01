@@ -60,11 +60,12 @@ WORKDIR /home/kudu
 ARG build3rddeps=true
 ARG repo_src=liusheng
 ARG pr_num=8
+ARG 3rdparty_type=''
 RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/$repo_src/kudu \
     && cd kudu \
     && git fetch origin pull/$pr_num/head:build-on-aarch64 \
     && git checkout build-on-aarch64 \
-    && bash -ex thirdparty/build-if-necessary.sh 2>&1 |tee -a ~/kudu-build3rd.log; fi
+    && bash -ex thirdparty/build-if-necessary.sh $3rdparty_type 2>&1 |tee -a ~/kudu-build3rd.log; fi
 
 COPY entrypoint.sh /home/kudu/
 RUN sudo chmod +x /home/kudu/entrypoint.sh
