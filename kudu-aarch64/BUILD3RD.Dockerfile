@@ -7,7 +7,7 @@ ENV PARALLEL 6
 
 ARG repo_src=liusheng
 ARG pr_num=8
-# For TSAN: 3rdparty_type=tsan
+# For TSAN: 3rdparty_type=tsan {common uninstrumented tsan}, default is: common uninstrumented
 ARG build_type=all
 
 RUN git clone https://github.com/$repo_src/kudu \
