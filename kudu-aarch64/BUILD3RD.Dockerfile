@@ -8,7 +8,7 @@ ENV PARALLEL 6
 ARG repo_src=liusheng
 ARG pr_num=8
 # For TSAN: 3rdparty_type=tsan
-ARG build_type=""
+ARG build_type=all
 
 RUN git clone https://github.com/$repo_src/kudu \
     && cd kudu \
