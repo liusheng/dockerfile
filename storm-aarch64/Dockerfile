@@ -65,10 +65,8 @@ RUN mkdir -p ~/storm-results/
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then git clone https://github.com/apache/storm \
     && cd storm \
-    && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn install -e -B 2>&1 |tee -a ~/storm-results/storm_build_test.log; fi
+    && mvn install -e -B 2>&1 |tee ~/storm-results/storm_build_test.log; fi
 
 CMD if [ ! -d storm ]; then git clone https://github.com/apache/storm; fi \
     && cd storm \
-    && sed -i "/rocksdb-version/ s|5.18.3|6.4.6|"  pom.xml \
-    && mvn install -e -B -Dtar 2>&1 |tee -a ~/storm-results/storm_build_test.log
+    && mvn install -e -B -Dtar 2>&1 |tee ~/storm-results/storm_build_test.log
