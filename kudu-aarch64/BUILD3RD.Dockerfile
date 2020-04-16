@@ -8,7 +8,7 @@ ENV PARALLEL 4
 ENV TEST_TIMEOUT_SECS 1800
 
 ARG repo_src=liusheng
-ARG pr_num=13
+ARG pr_num=14
 # For TSAN: 3rdparty_type=tsan {common uninstrumented tsan}, default is: common uninstrumented
 ARG build_type=""
 
