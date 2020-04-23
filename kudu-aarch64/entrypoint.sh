@@ -5,6 +5,13 @@
 #cd kudu
 #git fetch origin pull/8/head:build-on-aarch64
 #git checkout build-on-aarch64
+if [[ -n "$PULL_CODE" ]]; then
+  cd ~/kudu/
+  git checkout master
+  git remote update
+  git branch -D build-on-aarch64 || true
+  git checkout -b build-on-aarch64 remotes/origin/build-on-aarch64
+fi
 
 # The Java tests need 'JAVA8_HOME' env varq
 export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64
