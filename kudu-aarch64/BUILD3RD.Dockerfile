@@ -20,5 +20,5 @@ RUN git clone https://github.com/$repo_src/kudu \
     && mkdir -p ~/results/debug \
     && mkdir -p build/debug \
     && cd build/debug \
-    && /home/kudu/kudu/thirdparty/installed/common/bin/cmake -DCMAKE_BUILD_TYPE=DEBUG ../.. \
+    && ../../thirdparty/installed/common/bin/cmake -DCMAKE_BUILD_TYPE=DEBUG ../.. \
     && make -j4
