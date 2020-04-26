@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-[ -d ~/kudu ] && sudo chown kudu.kudu ~/kudu -R && cd ~/kudu/
+[ -d ~/kudu ] && cd ~/kudu/
 
 #git clone https://github.com/liusheng/kudu
 #cd kudu
