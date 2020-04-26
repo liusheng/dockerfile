@@ -15,7 +15,7 @@ fi
 
 # The Java tests need 'JAVA8_HOME' env varq
 export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64
-sudo ln -s /usr/include/locale.h /usr/include/xlocale.h
+sudo ln -s /usr/include/locale.h /usr/include/xlocale.h || true
 export TEST_TIMEOUT_SECS=1800
 
 case $1 in
