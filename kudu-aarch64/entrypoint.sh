@@ -1,12 +1,13 @@
 #!/bin/bash -ex
-[ -d ~/kudu ] && cd ~/kudu/
+base_dir=/opt
+[ -d ${base_dir}/kudu ] && cd ${base_dir}/kudu/
 
 #git clone https://github.com/liusheng/kudu
 #cd kudu
 #git fetch origin pull/8/head:build-on-aarch64
 #git checkout build-on-aarch64
 if [[ -n "$PULL_CODE" ]]; then
-  cd ~/kudu/
+  cd ${base_dir}/kudu
   git checkout master
   git remote update
   git branch -D build-on-aarch64 || true
@@ -20,34 +21,34 @@ export TEST_TIMEOUT_SECS=1800
 
 case $1 in
 lint)
-  mkdir -p ~/results/lint
-  BUILD_TYPE="LINT" bash -x build-support/jenkins/build-and-test.sh 2>&1 | tee -a ~/results/lint/console.log
-  cp -r ~/kudu/build/lint/test-logs/ ~/results/lint/
+  mkdir -p ${base_dir}/results/lint
+  BUILD_TYPE="LINT" bash -x build-support/jenkins/build-and-test.sh 2>&1 | tee -a ${base_dir}/results/lint/console.log
+  cp -r ${base_dir}/kudu/build/lint/test-logs/ ${base_dir}/results/lint/
   ;;
 iwyu)
-  mkdir -p ~/results/iwyu
-  BUILD_TYPE="IWYU" bash -x build-support/jenkins/build-and-test.sh 2>&1 | tee -a ~/results/iwyu/console.log
-  cp -r ~/kudu/build/iwyu/test-logs/ ~/results/iwyu/
+  mkdir -p ${base_dir}/results/iwyu
+  BUILD_TYPE="IWYU" bash -x build-support/jenkins/build-and-test.sh 2>&1 | tee -a ${base_dir}/results/iwyu/console.log
+  cp -r ${base_dir}/kudu/build/iwyu/test-logs/ ${base_dir}/results/iwyu/
   ;;
 debug)
-  mkdir -p ~/results/debug
-  BUILD_TYPE="DEBUG" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ~/results/debug/console.log
-  cp -r ~/kudu/build/debug/test-logs/ ~/results/debug/
+  mkdir -p ${base_dir}/results/debug
+  BUILD_TYPE="DEBUG" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ${base_dir}/results/debug/console.log
+  cp -r ${base_dir}/kudu/build/debug/test-logs/ ${base_dir}/results/debug/
   ;;
 release)
-  mkdir -p ~/results/release
-  BUILD_TYPE="RELEASE" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ~/results/release/console.log
-  cp -r ~/kudu/build/release/test-logs/ ~/results/release/
+  mkdir -p ${base_dir}/results/release
+  BUILD_TYPE="RELEASE" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ${base_dir}/results/release/console.log
+  cp -r ${base_dir}/kudu/build/release/test-logs/ ${base_dir}/results/release/
   ;;
 asan)
-  mkdir -p ~/results/asan
-  BUILD_TYPE="ASAN" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ~/results/asan/console.log
-  cp -r ~/kudu/build/asan/test-logs/ ~/results/asan/
+  mkdir -p ${base_dir}/results/asan
+  BUILD_TYPE="ASAN" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ${base_dir}/results/asan/console.log
+  cp -r ${base_dir}/kudu/build/asan/test-logs/ ${base_dir}/results/asan/
   ;;
 tsan)
-  mkdir -p ~/results/tsan
-  BUILD_TYPE="TSAN" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ~/results/tsan/console.log
-  cp -r ~/kudu/build/tsan/test-logs/ ~/results/tsan/
+  mkdir -p ${base_dir}/results/tsan
+  BUILD_TYPE="TSAN" KUDU_ALLOW_SLOW_TESTS=0 bash -x build-support/jenkins/build-and-test.sh 2>&1 |tee ${base_dir}/results/tsan/console.log
+  cp -r ${base_dir}/kudu/build/tsan/test-logs/ ${base_dir}/results/tsan/
   ;;
 *)
   echo "NOTICE: you may need to update the code and apply the patch!"

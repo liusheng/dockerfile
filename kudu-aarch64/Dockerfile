@@ -51,26 +51,21 @@ RUN apt-get -q update \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-arm64
 
-# use non-root  user
-RUN useradd -m -d /home/kudu -s /bin/bash kudu && echo kudu:kudu | chpasswd && adduser kudu sudo
-RUN echo "kudu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-USER kudu
-WORKDIR /home/kudu
+WORKDIR /opt
 
 ARG build3rddeps=true
 ARG repo_src=liusheng
-ARG pr_num=8
+ARG pr_num=14
 ARG 3rdparty_type=''
 RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/$repo_src/kudu \
     && cd kudu \
     && git fetch origin pull/$pr_num/head:build-on-aarch64 \
     && git checkout build-on-aarch64 \
-    && bash -ex thirdparty/build-if-necessary.sh $3rdparty_type 2>&1 |tee -a ~/kudu-build3rd.log; fi
+    && bash -ex thirdparty/build-if-necessary.sh $3rdparty_type 2>&1 |tee -a /opt/kudu-build3rd.log; fi
 
-COPY entrypoint.sh /home/kudu/
-RUN sudo chmod +x /home/kudu/entrypoint.sh
+COPY entrypoint.sh /opt/
+RUN chmod +x /opt/entrypoint.sh
 
 ENV PULL_CODE=""
 
-ENTRYPOINT ["/home/kudu/entrypoint.sh"]
-
+ENTRYPOINT ["/opt/entrypoint.sh"]
