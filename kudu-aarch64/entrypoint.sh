@@ -2,6 +2,11 @@
 base_dir=/opt
 [ -d ${base_dir}/kudu ] && cd ${base_dir}/kudu/
 
+# curl https://patch-diff.githubusercontent.com/raw/liusheng/kudu/pull/17.patch | git apply
+if [[ -n "$PATCH" ]]; then
+  curl "$PATCH" | git apply
+fi
+
 # The Java tests need 'JAVA8_HOME' env varq
 export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64
 sudo ln -s /usr/include/locale.h /usr/include/xlocale.h || true
