@@ -1,5 +1,6 @@
-#!/bin/bash -ex
-set -xo pipefail
+#!/bin/bash -x
+
+set -o pipefail
 
 base_dir=/opt
 [ -d ${base_dir}/kudu ] && cd ${base_dir}/kudu/
@@ -42,4 +43,5 @@ tsan)
 esac
 exit_code=$?
 cp -r ${base_dir}/kudu/build/$1/test-logs/ ${base_dir}/results/$1/
+[[ $exit_code != 0 ]] && echo "There are failures in $1 testing, please check logs under test_results/$1"
 exit $exit_code
