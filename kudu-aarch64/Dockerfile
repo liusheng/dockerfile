@@ -1,5 +1,5 @@
-FROM ubuntu:bionic
-
+#FROM ubuntu:bionic
+FROM ubuntu:focal
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
