@@ -21,12 +21,6 @@ RUN cd $BASEDIR \
 
 ENV HADOOP_HOME $BASEDIR/hadoop-3.4.0-SNAPSHOT
 
-#RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
-#RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-#USER hadoop
-#WORKDIR /home/hadoop
-#
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
@@ -45,8 +39,15 @@ COPY mapred-site.xml $HADOOP_HOME/etc/hadoop/
 RUN cp $HADOOP_HOME/etc/hadoop/yarn-site.xml{,-bak}
 COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/
 
+RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
+RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN chown hadoop.hadoop $HADOOP_HOME -R
+
+USER hadoop
+WORKDIR $HADOOP_HOME
+
 ## I have no idea about this
-#RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /home/hadoop/hadoop-3.4.0-SNAPSHOT/etc/hadoop/hadoop-env.sh
+RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 #
 #RUN mkdir -p /tmp/hadoop-terasort/
 #
