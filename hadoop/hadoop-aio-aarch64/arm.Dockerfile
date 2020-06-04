@@ -51,4 +51,4 @@ RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.s
 
 EXPOSE 8088
 COPY entrypoint.sh $BASEDIR/
-ENTRYPOINT ["$BASEDIR//entrypoint.sh"]
+ENTRYPOINT ["$BASEDIR/entrypoint.sh"]
