@@ -50,5 +50,5 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 EXPOSE 8088
-COPY entrypoint.sh $BASEDIR/
-ENTRYPOINT ["$BASEDIR/entrypoint.sh"]
+COPY entrypoint.sh /opt/
+ENTRYPOINT ["/opt/entrypoint.sh"]
