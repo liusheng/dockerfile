@@ -47,17 +47,13 @@ RUN chown hadoop.hadoop $HADOOP_HOME -R
 USER hadoop
 WORKDIR $HADOOP_HOME
 
-## I have no idea about this
-#RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /home/hadoop/hadoop-3.4.0-SNAPSHOT/etc/hadoop/hadoop-env.sh
-#
-#RUN mkdir -p /tmp/hadoop-terasort/
-#
-#EXPOSE 8088
-#
-#COPY entrypoint.sh /home/hadoop/
-#
-#ENTRYPOINT ["/home/hadoop/entrypoint.sh"]
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
+    && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
+    && chmod 0600 ~/.ssh/authorized_keys
 
-# NOTE: need to specify the num of GB zise of data for terasort, e.g.
-# docker run -p 8088:8088 --name hadoop-terasort-1 -d liusheng2048/hadoop-terasort-x86 5
-# docker logs hadoop-terasort-1
+# I have no idea about this
+RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+EXPOSE 8088
+COPY entrypoint.sh $BASEDIR/
+ENTRYPOINT ["$BASEDIR//entrypoint.sh"]
