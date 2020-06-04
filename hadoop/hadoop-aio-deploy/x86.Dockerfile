@@ -56,5 +56,5 @@ RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.s
 
 EXPOSE 8088
 COPY entrypoint.sh /opt/
-RUN sudo chmod +x /opt/entrypoint.sh
+RUN sudo chmod +x /opt/entrypoint.sh && sudo chown hadoop.hadoop /opt/entrypoint.sh
 ENTRYPOINT ["/opt/entrypoint.sh"]
