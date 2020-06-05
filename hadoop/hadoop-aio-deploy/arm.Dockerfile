@@ -49,7 +49,7 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
 ## I have no idea about this
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
-EXPOSE 8088
+EXPOSE 8088 19888
 COPY entrypoint.sh /opt/
 RUN sudo chmod +x /opt/entrypoint.sh && sudo chown hadoop.hadoop /opt/entrypoint.sh
 ENTRYPOINT ["/opt/entrypoint.sh"]
