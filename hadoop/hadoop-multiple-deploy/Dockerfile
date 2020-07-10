@@ -1,6 +1,5 @@
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
         openssh-server \
@@ -8,6 +7,11 @@ RUN apt-get -q update \
         openjdk-11-jdk \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+ARG BASEDIR=/opt
+ENV HADOOP_HOME $BASEDIR/hadoop-3.3.0
+COPY hadoop-3.3.0-aarch64-RC0.tar.gz $BASEDIR
+RUN cd $BASEDIR && tar zxf hadoop-*.tar.gz
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
@@ -34,11 +38,6 @@ RUN useradd -m -d /home/mapred -s /bin/bash mapred -g hadoop -G sudo && echo map
 RUN echo "yarn ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "hdfs ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "mapred ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-ARG BASEDIR=/opt
-ENV HADOOP_HOME $BASEDIR/hadoop-3.3.0
-COPY hadoop-3.3.0-aarch64-RC0.tar.gz $BASEDIR
-RUN cd $BASEDIR && tar zxf hadoop-*.tar.gz
 
 USER hdfs
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
