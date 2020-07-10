@@ -6,6 +6,7 @@ RUN apt-get -q update \
         openssh-server \
         sudo \
         openjdk-11-jdk \
+        vim \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -51,5 +52,10 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && chmod 0600 ~/.ssh/authorized_keys
 
 USER root
+RUN chown hdfs:hadoop $HADOOP_HOME -R
 ## I have no idea about this
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+USER hdfs
+WORKDIR $HADOOP_HOME
+
