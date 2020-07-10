@@ -1,6 +1,18 @@
 <configuration>
     <property>
         <name>dfs.replication</name>
-        <value>1</value>
+        <value>0</value>
+    </property>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/data/hdfs/name</value>
+    </property>
+    <property>
+        <name>dfs.namenode.handler.count</name>
+        <value>10</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/data/hdfs/data</value>
     </property>
 </configuration>

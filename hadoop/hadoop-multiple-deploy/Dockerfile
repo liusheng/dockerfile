@@ -1,3 +1,4 @@
+FROM ubuntu:bionic
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
