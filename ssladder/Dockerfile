@@ -7,6 +7,7 @@ RUN apt-get -q update \
         ca-certificates \
         python-pip \
         libsodium-dev \
+        git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
