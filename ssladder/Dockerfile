@@ -16,6 +16,7 @@ RUN pip install setuptools \
     && pip install wheel \
     && pip install shadowsocks
 
-COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /opt/entrypoint.sh
+RUN chmod +x /opt/entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
