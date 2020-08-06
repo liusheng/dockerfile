@@ -1,3 +1,7 @@
 #!/bin/bash
 
-sserver -p 10111 -k ladder@19885 -m chacha20-ietf-poly1305 -d start
+if [[ "$1" = "" ]]; then
+  ssserver -p "${port:-10111}" -k "${password:-ladder@19885}" -m "${method:-chacha20-ietf-poly1305}" -d start
+else
+  exec "$@"
+fi
