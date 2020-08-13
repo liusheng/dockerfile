@@ -15,7 +15,6 @@ RUN apt-get -q update \
         automake \
         libtool \
         cmake \
-        zlib1g-dev \
         pkg-config \
         libssl-dev \
         libssl1.0.0 \
@@ -24,6 +23,12 @@ RUN apt-get -q update \
         curl \
         sudo \
         git \
+        zlib1g-dev \
+        snappy \
+        libsnappy-dev \
+        bzip2 \
+        libbz2-dev \
+        libzstd1-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
