@@ -24,7 +24,6 @@ RUN apt-get -q update \
         sudo \
         git \
         zlib1g-dev \
-        snappy \
         libsnappy-dev \
         bzip2 \
         libbz2-dev \
@@ -91,12 +90,12 @@ RUN curl -sL https://github.com/liusheng/phantomjs/releases/download/2.1.1/phant
 #    && cd build/ && cmake ../ && make \
 #    && make install
 
-RUN apt-get -q update \
-    &&	apt-get -q install -y libsnappy1v5=1.1.3-2 \
-         libsnappy-dev=1.1.3-2 \
-         snappy \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get -q update \
+#    &&	apt-get -q install -y libsnappy1v5=1.1.3-2 \
+#         libsnappy-dev=1.1.3-2 \
+#         snappy \
+#    && apt-get clean \
+#    && rm -rf /var/lib/apt/lists/*
 
 # install Bost 1.72
 RUN curl -L https://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.bz2/download > boost_1_72_0.tar.bz2 \
