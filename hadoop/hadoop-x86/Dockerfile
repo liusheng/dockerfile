@@ -71,6 +71,13 @@ RUN git clone https://github.com/google/snappy /opt/snappy \
     && cd build/ && cmake ../ && make \
     && make install
 
+# install Bost 1.72
+RUN curl -L https://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.bz2/download > boost_1_72_0.tar.bz2 \
+    && tar --bzip2 -xf boost_1_72_0.tar.bz2 \
+    && cd boost_1_72_0 \
+    && ./bootstrap.sh --prefix=/usr/ \
+    && ./b2 --without-python install
+
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-x86/protobuf-3.7.1.tar.gz | tar zx -C /opt/
 RUN echo "/opt/protobuf-3.7.1/lib/" > /etc/ld.so.conf.d/protobuf-3.7.1.conf && ldconfig
 ENV PROTOBUF_HOME /opt/protobuf-3.7.1

@@ -100,10 +100,10 @@ RUN apt-get -q update \
 
 # install Bost 1.72
 RUN curl -L https://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.bz2/download > boost_1_72_0.tar.bz2 \
-&& tar --bzip2 -xf boost_1_72_0.tar.bz2 \
-&& cd boost_1_72_0 \
-&& ./bootstrap.sh --prefix=/usr/ \
-&& ./b2 --without-python install
+    && tar --bzip2 -xf boost_1_72_0.tar.bz2 \
+    && cd boost_1_72_0 \
+    && ./bootstrap.sh --prefix=/usr/ \
+    && ./b2 --without-python install
 
 ########## For Hbase building ###################
 RUN curl -sL https://github.com/liusheng/package/releases/download/protobuf-aarch64/protobuf-3.5.1.1.tar.gz | tar zx -C /opt/
