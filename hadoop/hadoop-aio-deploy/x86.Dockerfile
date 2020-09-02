@@ -2,7 +2,7 @@ FROM ubuntu:bionic
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY hadoop-3.4.0-SNAPSHOT.tar.gz /opt/
+COPY hadoop-3.3.0.tar.gz /opt/
 
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
@@ -16,9 +16,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 
 ARG BASEDIR=/opt
-COPY hadoop-3.4.0-SNAPSHOT.tar.gz $BASEDIR
+COPY hadoop-3.3.0.tar.gz $BASEDIR
 RUN cd $BASEDIR \
-    && tar zxf hadoop-3.4.0-SNAPSHOT.tar.gz
+    && tar zxf hadoop-3.3.0.tar.gz
 
 ENV HADOOP_HOME $BASEDIR/hadoop-3.4.0-SNAPSHOT
 
