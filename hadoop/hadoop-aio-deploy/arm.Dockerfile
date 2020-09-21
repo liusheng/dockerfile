@@ -2,7 +2,7 @@ FROM ubuntu:bionic
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-ARG HADOOP_TAR=hadoop-3.3.0-aarch64
+ARG HADOOP_TAR=hadoop-3.4.0-SNAPSHOT
 
 COPY ${HADOOP_TAR}.tar.gz /opt/
 

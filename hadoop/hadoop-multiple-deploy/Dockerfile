@@ -33,9 +33,9 @@ COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/
 COPY workers $HADOOP_HOME/etc/hadoop/
 
 RUN groupadd hadoop
-RUN useradd -m -d /home/yarn -s /bin/bash yarn -g hadoop -G sudo && echo yarn:yarn | chpasswd
-RUN useradd -m -d /home/hdfs -s /bin/bash hdfs -g hadoop -G sudo && echo hdfs:hdfs | chpasswd
-RUN useradd -m -d /home/mapred -s /bin/bash mapred -g hadoop -G sudo && echo mapred:mapred | chpasswd
+RUN useradd -m -d /home/yarn -s /bin/bash yarn -g hadoop -G sudo
+RUN useradd -m -d /home/hdfs -s /bin/bash hdfs -g hadoop -G sudo
+RUN useradd -m -d /home/mapred -s /bin/bash mapred -g hadoop -G sudo
 
 RUN echo "yarn ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "hdfs ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
