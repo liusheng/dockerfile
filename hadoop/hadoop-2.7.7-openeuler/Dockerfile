@@ -14,7 +14,7 @@ RUN yum update && yum install -y \
     snappy snappy-devel \
     bzip2 libzip-devel \
     java-1.8.0-openjdk java-1.8.0-openjdk-devel \
-    zlib zlib-devel \
+    zlib zlib-devel
     #openssl openssl-devel
 
 RUN curl -sL https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz | tar zx -C /opt/ \
