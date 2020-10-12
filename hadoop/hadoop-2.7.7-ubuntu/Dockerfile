@@ -21,10 +21,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python python2.7 pylint \
     openjdk-7-jdk doxygen
 
-# Fixing the Apache commons / Maven dependency problem under Ubuntu:
-# See http://wiki.apache.org/commons/VfsProblems
-RUN cd /usr/share/maven/lib && ln -s ../../java/commons-lang.jar .
-
 # Install maven 3.2.5
 RUN curl -sL https://downloads.apache.org/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz | tar zx -C /opt/
 ENV MAVEN_HOME /opt/apache-maven-3.2.5/
