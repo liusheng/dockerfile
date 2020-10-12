@@ -13,7 +13,14 @@ RUN yum update && yum install -y \
     git tar curl patch shadow-utils make cmake gcc gcc-c++ \
     snappy snappy-devel \
     bzip2 libzip-devel \
-    java-1.8.0-openjdk
+    java-1.8.0-openjdk java-1.8.0-openjdk-devel \
+    zlib zlib-devel \
+    #openssl openssl-devel
+
+RUN curl -sL https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz | tar zx -C /opt/ \
+&& cd /opt/openssl-1.0.1u \
+&& make \
+&& make install
 
 # Install maven 3.2.5
 RUN curl -sL https://downloads.apache.org/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz | tar zx -C /opt/
