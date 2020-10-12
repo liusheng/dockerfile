@@ -37,13 +37,13 @@ RUN apt-get install -y openjdk-7-jdk
 ######
 # Install spotbugs (successor of findbugs)
 ######
-RUN mkdir -p /opt/spotbugs && \
-    curl -L -s -S \
-         http://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
-         -o /opt/spotbugs.tar.gz && \
-    tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
+#RUN mkdir -p /opt/spotbugs && \
+#    curl -L -s -S \
+#         http://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
+#         -o /opt/spotbugs.tar.gz && \
+#    tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
 # Hadoop uses FINDBUGS_HOME to run spotbugs
-ENV FINDBUGS_HOME /opt/spotbugs
+#ENV FINDBUGS_HOME /opt/spotbugs
 
 ####
 # Install shellcheck
@@ -89,4 +89,5 @@ RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hadoop
 WORKDIR /home/hadoop
 
-RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
+RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64 \
+&& cd hadoop
