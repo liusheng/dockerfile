@@ -17,8 +17,10 @@ RUN yum update && yum install -y \
     zlib zlib-devel
     #openssl openssl-devel
 
+# Hadoop 2.7 require openssl 1.0.x than 1.1.x
 RUN curl -sL https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz | tar zx -C /opt/ \
 && cd /opt/openssl-1.0.1u \
+&& ./config --prefix=/usr/local --openssldir=/usr/local/ssl \
 && make \
 && make install
 
@@ -40,6 +42,8 @@ RUN echo "/opt/protobuf/lib/" > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfi
 ENV PROTOBUF_HOME /opt/protobuf
 ENV PATH "${PATH}:/opt/protobuf/bin"
 
+ENV MAVEN_OPTS -Xms256m -Xmx1536m
+
 RUN groupadd hadoop
 RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -48,5 +52,5 @@ USER hadoop
 WORKDIR /home/hadoop
 
 RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
-
+COPY fix-hadoop-native-building.patch hadoop/
 #  mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip
