@@ -10,7 +10,7 @@ RUN sed -i s'/TMOUT=300/TMOUT=3000000000/' /etc/bashrc
 # sufficient or irrelevant.
 ######
 RUN yum update && yum install -y \
-    git tar curl make cmake gcc gcc-c++ \
+    git tar curl patch shadow-utils make cmake gcc gcc-c++ \
     snappy snappy-devel \
     bzip2 libzip-devel \
     java-1.8.0-openjdk
@@ -33,7 +33,8 @@ RUN echo "/opt/protobuf/lib/" > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfi
 ENV PROTOBUF_HOME /opt/protobuf
 ENV PATH "${PATH}:/opt/protobuf/bin"
 
-RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
+RUN groupadd hadoop
+RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hadoop
