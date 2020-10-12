@@ -48,7 +48,6 @@ RUN mkdir -p /opt/spotbugs && \
          https://repo1.maven.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
          -o /opt/spotbugs.tar.gz && \
     tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
- Hadoop uses FINDBUGS_HOME to run spotbugs
 ENV FINDBUGS_HOME /opt/spotbugs
 
 ####
