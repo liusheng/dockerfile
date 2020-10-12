@@ -5,8 +5,9 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ######
 # Install common dependencies from packages
 ######
+# NOTE the maven-3.0.5 of ubuntu trusty defaultly use http than https which may cause many errors
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    git curl ant make maven \
+    git curl ant make \
     cmake gcc g++ \
     protobuf-compiler libprotoc-dev \
     protobuf-c-compiler libprotobuf-dev \
@@ -24,6 +25,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # See http://wiki.apache.org/commons/VfsProblems
 RUN cd /usr/share/maven/lib && ln -s ../../java/commons-lang.jar .
 
+# Install maven 3.2.5
+RUN curl -sL https://downloads.apache.org/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz | tar zx -C /opt/
+ENV MAVEN_HOME /opt/apache-maven-3.2.5/
+ENV PATH "/opt/apache-maven-3.2.5/bin:${PATH}"
+
 #######
 # Java OpenJDK
 #######
@@ -37,13 +43,13 @@ RUN apt-get install -y openjdk-7-jdk
 ######
 # Install spotbugs (successor of findbugs)
 ######
-#RUN mkdir -p /opt/spotbugs && \
-#    curl -L -s -S \
-#         http://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
-#         -o /opt/spotbugs.tar.gz && \
-#    tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
-# Hadoop uses FINDBUGS_HOME to run spotbugs
-#ENV FINDBUGS_HOME /opt/spotbugs
+RUN mkdir -p /opt/spotbugs && \
+    curl -L -s -S \
+         https://repo1.maven.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
+         -o /opt/spotbugs.tar.gz && \
+    tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
+ Hadoop uses FINDBUGS_HOME to run spotbugs
+ENV FINDBUGS_HOME /opt/spotbugs
 
 ####
 # Install shellcheck
@@ -89,5 +95,6 @@ RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hadoop
 WORKDIR /home/hadoop
 
-RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64 \
-&& cd hadoop
+RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
+
+#  mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip
