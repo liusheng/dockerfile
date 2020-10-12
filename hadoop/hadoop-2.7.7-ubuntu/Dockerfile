@@ -3,10 +3,7 @@ FROM ubuntu:trusty
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ######
-# Install common dependencies from packages. Versions here are either
-# sufficient or irrelevant.
-# WARNING: DO NOT PUT JAVA APPS HERE! Otherwise they will install default
-# Ubuntu Java.  See Java section below!
+# Install common dependencies from packages
 ######
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git curl ant make maven \
@@ -21,11 +18,61 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     fuse libfuse-dev \
     libcurl4-openssl-dev \
     python python2.7 pylint \
-    openjdk-7-jdk doxygen \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    openjdk-7-jdk doxygen
 
+# Fixing the Apache commons / Maven dependency problem under Ubuntu:
+# See http://wiki.apache.org/commons/VfsProblems
+RUN cd /usr/share/maven/lib && ln -s ../../java/commons-lang.jar .
+
+#######
+# Java OpenJDK
+#######
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:webupd8team/java
+RUN apt-get update
+
+# Install OpenJDK 7
+RUN apt-get install -y openjdk-7-jdk
+
+######
+# Install spotbugs (successor of findbugs)
+######
+RUN mkdir -p /opt/spotbugs && \
+    curl -L -s -S \
+         http://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/3.1.2/spotbugs-3.1.2.tgz \
+         -o /opt/spotbugs.tar.gz && \
+    tar xzf /opt/spotbugs.tar.gz --strip-components 1 -C /opt/spotbugs
+# Hadoop uses FINDBUGS_HOME to run spotbugs
+ENV FINDBUGS_HOME /opt/spotbugs
+
+####
+# Install shellcheck
+####
+RUN apt-get install -y cabal-install
+RUN cabal update && cabal install shellcheck --global
+
+###
+# Avoid out of memory errors in builds
+###
+ENV MAVEN_OPTS -Xms256m -Xmx1536m
+
+###
+# Everything past this point is either not needed for testing or breaks Yetus.
+# So tell Yetus not to read the rest of the file:
+# YETUS CUT HERE
+###
+
+####
+# Install Forrest (for Apache Hadoop website)
+###
+RUN mkdir -p /usr/local/apache-forrest ; \
+    curl -O http://archive.apache.org/dist/forrest/0.8/apache-forrest-0.8.tar.gz ; \
+    tar xzf *forrest* --strip-components 1 -C /usr/local/apache-forrest ; \
+    echo 'forrest.home=/usr/local/apache-forrest' > build.properties
+
+####
 # Building patched protobuf-2.5.0
+###
 RUN curl -sSL https://github.com/protocolbuffers/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz | tar zx -C /opt/ \
 && cd /opt/protobuf-2.5.0 \
 && curl -L -O https://gist.githubusercontent.com/liusheng/64aee1b27de037f8b9ccf1873b82c413/raw/118c2fce733a9a62a03281753572a45b6efb8639/protobuf-2.5.0-arm64.patch \
