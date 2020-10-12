@@ -48,8 +48,8 @@ RUN apt-get install -y openjdk-7-jdk
 ####
 # Install shellcheck
 ####
-RUN apt-get install -y cabal-install
-RUN cabal update && cabal install shellcheck --global
+#RUN apt-get install -y cabal-install
+#RUN cabal update && cabal install shellcheck --global
 
 ###
 # Avoid out of memory errors in builds
