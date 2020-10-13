@@ -55,8 +55,7 @@ RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
 COPY fix-hadoop-native-building.patch hadoop/
 
 ARG prebuild=false
-RUN if [ "$prebuild" = "true" ]; then \
-    && cd hadoop \
+RUN if [ "$prebuild" = "true" ]; then cd hadoop \
     && git apply fix-hadoop-native-building.patch \
     && mkdir -p ~/hadoop-results/ \
     && export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
