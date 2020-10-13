@@ -1,5 +1,4 @@
 #!/bin/bash -ex
-export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
 
 case $1 in
 start)
