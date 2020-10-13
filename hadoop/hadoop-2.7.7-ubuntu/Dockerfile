@@ -84,6 +84,8 @@ RUN echo "/opt/protobuf/lib/" > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldconfi
 ENV PROTOBUF_HOME /opt/protobuf
 ENV PATH "${PATH}:/opt/protobuf/bin"
 
+ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-arm64
+
 RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
@@ -92,4 +94,9 @@ WORKDIR /home/hadoop
 
 RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
 
-#  mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip
+ARG prebuild=false
+RUN if [ "$prebuild" = "true" ]; then \
+    && cd hadoop \
+    && mkdir -p ~/hadoop-results/ \
+    && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hadoop-results/hadoop_build.log \
+    && export PATH=${PATH}:$(readlink -f ~/hadoop/hadoop-dist/target/hadoop-2.7.7/bin); fi
