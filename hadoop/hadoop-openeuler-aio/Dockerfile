@@ -2,6 +2,8 @@ FROM docker.pkg.github.com/liusheng/dockerfile/hadoop-2.7.7-openeuler:pre-build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+RUN yum update && yum install -y iproute
+
 ENV HADOOP_HOME /home/hadoop/hadoop/hadoop-dist/target/hadoop-2.7.7
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
 
@@ -14,11 +16,10 @@ COPY mapred-site.xml $HADOOP_HOME/etc/hadoop/
 COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/
 
 RUN sudo ssh-keygen -A \
-&& sudo /usr/sbin/sshd
-
-RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
-    && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
-    && chmod 0600 ~/.ssh/authorized_keys
+&& sudo /usr/sbin/sshd \
+&& ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
+&& cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
+&& chmod 0600 ~/.ssh/authorized_keys
 
 RUN echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> ~/.bashrc
 

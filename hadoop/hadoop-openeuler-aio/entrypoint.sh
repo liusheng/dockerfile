@@ -1,8 +1,9 @@
 #!/bin/bash -ex
 
+sudo /usr/sbin/sshd
+
 case $1 in
 start)
-  sudo service ssh restart
   hdfs namenode -format
   start-dfs.sh
   start-yarn.sh
