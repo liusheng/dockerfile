@@ -5,7 +5,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ######
 # Install common dependencies from packages
 ######
-# NOTE the maven-3.0.5 of ubuntu trusty defaultly use http than https which may cause many errors
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git curl ant make \
     cmake gcc g++ \
@@ -21,7 +20,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python python2.7 pylint \
     openjdk-7-jdk doxygen
 
-# Install maven 3.2.5
+#######
+# Install maven 3.2.5, the maven-3.0.5 of ubuntu trusty defaultly use http than https which may cause many errors
+#######
 RUN curl -sL https://downloads.apache.org/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz | tar zx -C /opt/
 ENV MAVEN_HOME /opt/apache-maven-3.2.5/
 ENV PATH "/opt/apache-maven-3.2.5/bin:${PATH}"
@@ -49,8 +50,8 @@ ENV FINDBUGS_HOME /opt/spotbugs
 ####
 # Install shellcheck
 ####
-#RUN apt-get install -y cabal-install
-#RUN cabal update && cabal install shellcheck --global
+RUN apt-get install -y cabal-install
+RUN cabal update && cabal install shellcheck --global
 
 ###
 # Avoid out of memory errors in builds
