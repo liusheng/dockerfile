@@ -52,12 +52,14 @@ USER hadoop
 WORKDIR /home/hadoop
 
 RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
-COPY fix-hadoop-native-building.patch hadoop/
 
 ARG prebuild=false
 RUN if [ "$prebuild" = "true" ]; then cd hadoop \
-    && git apply fix-hadoop-native-building.patch \
     && mkdir -p ~/hadoop-results/ \
     && export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hadoop-results/hadoop_build.log \
     && export PATH=${PATH}:$(readlink -f ~/hadoop/hadoop-dist/target/hadoop-2.7.7/bin); fi
+
+COPY entrypoint.sh /opt/
+RUN sudo chmod +x /opt/entrypoint.sh && sudo chown hadoop.hadoop /opt/entrypoint.sh
+ENTRYPOINT ["/opt/entrypoint.sh"]
