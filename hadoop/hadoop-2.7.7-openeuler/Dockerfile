@@ -51,10 +51,10 @@ RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hadoop
 WORKDIR /home/hadoop
 
-RUN git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64
-
 ARG prebuild=false
-RUN if [ "$prebuild" = "true" ]; then cd hadoop \
+RUN if [ "$prebuild" = "true" ]; then rm -fr hadoop \
+    && git clone https://github.com/kunpengcompute/hadoop -b release-2.7.7-aarch64 \
+    && cd hadoop \
     && mkdir -p ~/hadoop-results/ \
     && export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac)))) \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hadoop-results/hadoop_build.log \
