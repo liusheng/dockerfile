@@ -1,0 +1,15 @@
+name: delete old packages
+
+on:
+  pull_request:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Package Versions
+        uses: actions/delete-package-versions@v1.0.3
+        with:
+          package-name: sslader
+
