@@ -1,11 +1,13 @@
 FROM openeuler-20.09:latest
 
-LABEL org.opencontainers.image.source="https://github.com/liusheng/hadoop-2.7.7-openeuler"
+LABEL org.opencontainers.image.source="https://github.com/liusheng/dockerfile"
 LABEL maintainer="liusheng2048@gmail.com"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY openEuler_aarch64.repo /etc/yum.repos.d/
+#openEuler-20.03-LTS doesn't have source repo
+#COPY openEuler_aarch64.repo /etc/yum.repos.d/
+
 RUN sed -i s'/TMOUT=300/TMOUT=3000000000/' /etc/bashrc
 
 ######
@@ -17,7 +19,7 @@ RUN yum update -y && yum install -y \
     snappy snappy-devel \
     bzip2 libzip-devel \
     java-1.8.0-openjdk java-1.8.0-openjdk-devel \
-    zlib zlib-devel
+    zlib zlib-devel libtirpc-devel
     #openssl openssl-devel
 
 # Hadoop 2.7 require openssl 1.0.x than 1.1.x

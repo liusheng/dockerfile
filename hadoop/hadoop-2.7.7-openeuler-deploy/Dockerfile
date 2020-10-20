@@ -1,5 +1,8 @@
 FROM ghcr.io/liusheng/hadoop-2.7.7-openeuler:pre-build
 
+LABEL org.opencontainers.image.source="https://github.com/liusheng/dockerfile"
+LABEL maintainer="liusheng2048@gmail.com"
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN yum update -y && yum install -y iproute
