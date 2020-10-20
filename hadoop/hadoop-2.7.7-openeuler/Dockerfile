@@ -1,3 +1,5 @@
+LABEL org.opencontainers.image.source https://github.com/liusheng/hadoop-2.7.7-openeuler
+
 FROM openeuler-20.03-lts:latest
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
