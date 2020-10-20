@@ -1,5 +1,8 @@
 FROM ubuntu:bionic
 
+LABEL org.opencontainers.image.source="https://github.com/liusheng/hadoop-2.7.7-openeuler"
+LABEL maintainer="liusheng2048@gmail.com"
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ######

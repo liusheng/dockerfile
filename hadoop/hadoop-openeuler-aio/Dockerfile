@@ -2,7 +2,7 @@ FROM ghcr.io/liusheng/hadoop-2.7.7-openeuler:pre-build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN yum update && yum install -y iproute
+RUN yum update -y && yum install -y iproute
 
 ENV HADOOP_HOME /home/hadoop/hadoop/hadoop-dist/target/hadoop-2.7.7
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"

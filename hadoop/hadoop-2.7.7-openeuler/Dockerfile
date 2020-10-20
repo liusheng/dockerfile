@@ -1,6 +1,7 @@
-LABEL org.opencontainers.image.source https://github.com/liusheng/hadoop-2.7.7-openeuler
+FROM openeuler-20.09:latest
 
-FROM openeuler-20.03-lts:latest
+LABEL org.opencontainers.image.source="https://github.com/liusheng/hadoop-2.7.7-openeuler"
+LABEL maintainer="liusheng2048@gmail.com"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -11,8 +12,8 @@ RUN sed -i s'/TMOUT=300/TMOUT=3000000000/' /etc/bashrc
 # Install common dependencies from packages. Versions here are either
 # sufficient or irrelevant.
 ######
-RUN yum update && yum install -y \
-    git tar curl patch shadow-utils make cmake gcc gcc-c++ \
+RUN yum update -y && yum install -y \
+    sudo git tar curl patch shadow-utils make cmake gcc gcc-c++ \
     snappy snappy-devel \
     bzip2 libzip-devel \
     java-1.8.0-openjdk java-1.8.0-openjdk-devel \
