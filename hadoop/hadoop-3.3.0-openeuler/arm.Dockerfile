@@ -40,3 +40,6 @@ RUN curl -L https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0
 
 ENV HADOOP_HOME /home/hadoop/hadoop-3.3.0
 COPY core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
+ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
+
+COPY start-svcs.sh /home/hadoop/
