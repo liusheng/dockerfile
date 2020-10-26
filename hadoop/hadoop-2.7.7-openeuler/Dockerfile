@@ -51,7 +51,7 @@ ENV MAVEN_OPTS -Xms256m -Xmx1536m
 
 RUN groupadd hadoop
 RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
-RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoersF
+RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hadoop
 WORKDIR /home/hadoop
