@@ -18,6 +18,7 @@ RUN yum update -y \
         curl \
         sudo \
         git \
+        hostname \
         openssh-server \
         snappy \
         snappy-devel \

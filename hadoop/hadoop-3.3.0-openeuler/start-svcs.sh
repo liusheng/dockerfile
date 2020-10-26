@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 function start_svc() {
   case $1 in
@@ -15,6 +16,9 @@ function start_svc() {
   nodemanager)
     yarn --daemon start nodemanager
     ;;
+  historyserver)
+    mapred --daemon start historyserver
+    ;;
   *)
     echo "Unsupported service $1"
     exit 1
@@ -22,6 +26,11 @@ function start_svc() {
   esac
 }
 
-for svc in "$@"; do
+svcs=$*
+[[ $# == 1 ]] && [[ "$1" == "all" ]] && svcs="namenode datanode resourcemanager nodemanager historyserver"
+[[ $# == 1 ]] && [[ "$1" == "controller" ]] && svcs="namenode resourcemanager historyserver"
+[[ $# == 1 ]] && [[ "$1" == "worker" ]] && svcs="datanode nodemanager"
+
+for svc in $svcs; do
   start_svc "$svc"
 done
