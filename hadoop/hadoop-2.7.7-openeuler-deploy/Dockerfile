@@ -4,14 +4,15 @@ LABEL org.opencontainers.image.source="https://github.com/liusheng/dockerfile"
 LABEL maintainer="liusheng2048@gmail.com"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+USER root
 
 RUN yum update -y && yum install -y iproute
 
-ENV HADOOP_HOME /home/hadoop/hadoop/hadoop-dist/target/hadoop-2.7.7
-ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
-
 USER hadoop
 WORKDIR $HADOOP_HOME
+
+ENV HADOOP_HOME /home/hadoop/hadoop/hadoop-dist/target/hadoop-2.7.7
+ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
 
 COPY core-site.xml $HADOOP_HOME/etc/hadoop/
 COPY hdfs-site.xml $HADOOP_HOME/etc/hadoop/
