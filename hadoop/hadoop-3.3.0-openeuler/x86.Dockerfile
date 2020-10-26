@@ -5,6 +5,8 @@ LABEL maintainer="liusheng2048@gmail.com"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+RUN sed -i s'/TMOUT=300/TMOUT=3000000000/' /etc/bashrc
+
 ######
 # Install common dependencies from packages
 ######
