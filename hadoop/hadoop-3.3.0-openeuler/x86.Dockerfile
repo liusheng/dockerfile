@@ -39,4 +39,4 @@ WORKDIR /home/hadoop
 RUN curl -L https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0-aarch64.tar.gz | tar zx
 
 ENV HADOOP_HOME /home/hadoop/hadoop-3.3.0
-RUN cp core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
+COPY core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
