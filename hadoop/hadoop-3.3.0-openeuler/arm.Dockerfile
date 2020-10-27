@@ -45,5 +45,7 @@ ENV HADOOP_HOME /home/hadoop/hadoop-3.3.0
 COPY --chown=hadoop:hadoop core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
 
-COPY --chown=hadoop:hadoop start-svcs.sh /home/hadoop/
-RUN chmod +x /home/hadoop/start-svcs.sh
+COPY --chown=hadoop:hadoop entrypoint.sh /home/hadoop/
+RUN chmod +x /home/hadoop/entrypoint.sh
+
+ENTRYPOINT ["/home/hadoop/entrypoint.sh"]

@@ -1,5 +1,5 @@
 ## My ladder
 
 ```shell script
-docker run -p 9527:9527 -e password="*******" -d liusheng2048/ssladder
+docker run -p 10122:10122 -e password="*******" -d ghcr.io/liusheng/ssladder
 ```

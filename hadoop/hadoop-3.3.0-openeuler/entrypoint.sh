@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+svcs_specified=${HADOOP_SERVICES:-""}
+
 function start_svc() {
   case $1 in
   namenode)
@@ -25,12 +27,20 @@ function start_svc() {
     ;;
   esac
 }
+[[ $# != 0 ]] && exec "$@"
 
-svcs=$*
-[[ $# == 1 ]] && [[ "$1" == "all" ]] && svcs="namenode datanode resourcemanager nodemanager historyserver"
-[[ $# == 1 ]] && [[ "$1" == "controller" ]] && svcs="namenode resourcemanager historyserver"
-[[ $# == 1 ]] && [[ "$1" == "worker" ]] && svcs="datanode nodemanager"
+if [[ "$svcs_specified" == "all" ]];then
+  svcs="namenode datanode resourcemanager nodemanager historyserver"
+elif [[ "$svcs_specified" == "controller" ]];then
+  svcs="namenode resourcemanager historyserver"
+elif [[ "$svcs_specified" == "worker" ]];then
+  svcs="datanode nodemanager"
+else
+  svcs="$svcs_specified"
+fi
 
 for svc in $svcs; do
   start_svc "$svc"
 done
+
+tail -f /dev/null
