@@ -29,7 +29,7 @@ RUN yum update -y \
         java-1.8.0-openjdk-devel \
         maven
 
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-6.oe1.aarch64
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-6.oe1.x86_64
 
 RUN groupadd hadoop
 RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
