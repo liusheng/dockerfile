@@ -38,7 +38,7 @@ RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER hadoop
 WORKDIR /home/hadoop
 
-RUN curl -L https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0-aarch64.tar.gz | tar zx
+RUN curl -L https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz | tar zx
 
 ENV HADOOP_HOME /home/hadoop/hadoop-3.3.0
 COPY --chown=hadoop:hadoop core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
