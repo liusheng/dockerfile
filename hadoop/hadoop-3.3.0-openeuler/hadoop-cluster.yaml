@@ -1,0 +1,149 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hadoop
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hadoop-conf
+  namespace: hadoop
+data:
+  HADOOP_CONTROLLER: hadoop-controller
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hadoop-controller
+  namespace: hadoop
+spec:
+  type: NodePort
+  selector:
+    app: hadoop-controller
+  ports:
+    - name: yarn-rpc
+      port: 8031
+      targetPort: 8031
+    - name: rpc
+      port: 9000
+      targetPort: 9000
+    - name: http
+      port: 50070
+      targetPort: 50070
+    - name: jobhistory
+      port: 19888
+      targetPort: 19888
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hadoop-controller
+  namespace: hadoop
+  labels:
+    app: hadoop-controller
+spec:
+  nodeSelector:
+    kubernetes.io/arch: arm64
+  containers:
+    - name: hadoop-master
+      image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:aarch64
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8031
+        - containerPort: 9000
+        - containerPort: 50070
+      env:
+        - name: HADOOP_SERVICES
+          value: "controller"
+        - name: HADOOP_CONTROLLER
+          valueFrom:
+            configMapKeyRef:
+              name: hadoop-conf
+              key: HADOOP_CONTROLLER
+
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hadoop-worker-arm
+  namespace: hadoop
+spec:
+  type: NodePort
+  selector:
+    app: hadoop-worker-arm
+  ports:
+    - name: yarn-rpc
+      port: 9000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: hadoop-worker-arm
+    namespace: hadoop
+    labels:
+      app: hadoop-worker-arm
+spec:
+  nodeSelector:
+    kubernetes.io/arch: arm64
+  containers:
+    - name: hadoop-worker-arm
+      image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:aarch64
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8040
+        - containerPort: 8041
+        - containerPort: 8042
+        - containerPort: 9000
+      env:
+        - name: HADOOP_SERVICES
+          value: "worker"
+        - name: HADOOP_CONTROLLER
+          valueFrom:
+            configMapKeyRef:
+              name: hadoop-conf
+              key: HADOOP_CONTROLLER
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hadoop-worker-x86
+  namespace: hadoop
+spec:
+  type: NodePort
+  selector:
+    app: hadoop-worker-x86
+  ports:
+    - name: yarn-rpc
+      port: 9000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: hadoop-worker-x86
+    namespace: hadoop
+    labels:
+      app: hadoop-worker-x86
+spec:
+  nodeSelector:
+    kubernetes.io/arch: arm64
+  containers:
+    - name: hadoop-worker-x86
+      image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:x86
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8040
+        - containerPort: 8041
+        - containerPort: 8042
+        - containerPort: 9000
+      env:
+        - name: HADOOP_SERVICES
+          value: "worker"
+        - name: HADOOP_CONTROLLER
+          valueFrom:
+            configMapKeyRef:
+              name: hadoop-conf
+              key: HADOOP_CONTROLLER
+  restartPolicy: Always

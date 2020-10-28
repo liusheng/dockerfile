@@ -1,4 +1,4 @@
-FROM openeuler-20.09:latest
+FROM openeuler-20.09-arm:latest
 
 LABEL org.opencontainers.image.source="https://github.com/liusheng/dockerfile"
 LABEL maintainer="liusheng2048@gmail.com"
