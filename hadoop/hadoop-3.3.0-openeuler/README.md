@@ -20,6 +20,7 @@
       docker tag openeuler-20.09 openeuler-20.09-x86
       docker rmi openeuler-20.09
       ```
+ 
 - Build Hadoop docker images based on openEuler
 
   - Build on ARM machine
