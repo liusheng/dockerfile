@@ -2,6 +2,12 @@
 set -ex
 
 svcs_specified=${HADOOP_SERVICES:-""}
+hadoop_controller=${HADOOP_CONTROLLER:-""}
+
+if [[ "$hadoop_controller" != "" ]]; then
+  sed -i "/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/core-site.xml
+  sed -i "/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/yarn-site.xml
+fi
 
 function start_svc() {
   case $1 in
