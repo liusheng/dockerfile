@@ -4,7 +4,6 @@
 
 - Download and load openEuler docker image
     - For openEuler-20.09 ARM
-
       ```shell script
       # For openEuler-20.09 ARM
       curl -L -O https://repo.openeuler.org/openEuler-20.09/docker_img/aarch64/openEuler-docker.aarch64.tar.xz
@@ -13,15 +12,13 @@
       docker rmi openeuler-20.09
       ```
      - For openEuler-20.09 x86
-
-      ```shell script
-      # For openEuler-20.09 ARM
-      curl -L -O https://repo.openeuler.org/openEuler-20.09/docker_img/x86_64/openEuler-docker.x86_64.tar.xz
-      docker load --input openEuler-docker.x86_64.tar.xz
-      docker tag openeuler-20.09 openeuler-20.09-x86
-      docker rmi openeuler-20.09
-      ```
- 
+       ```shell script
+       # For openEuler-20.09 ARM
+       curl -L -O https://repo.openeuler.org/openEuler-20.09/docker_img/x86_64/openEuler-docker.x86_64.tar.xz
+       docker load --input openEuler-docker.x86_64.tar.xz
+       docker tag openeuler-20.09 openeuler-20.09-x86
+       docker rmi openeuler-20.09
+       ```
 - Build Hadoop docker images based on openEuler
 
   - Build on ARM machine
