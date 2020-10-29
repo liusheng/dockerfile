@@ -4,6 +4,10 @@
         <value>localhost</value>
     </property>
     <property>
+        <name>yarn.nodemanager.address</name>
+        <value>localhost:40555</value>
+    </property>
+    <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
