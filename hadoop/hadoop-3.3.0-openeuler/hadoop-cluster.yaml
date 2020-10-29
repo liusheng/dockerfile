@@ -139,6 +139,8 @@ spec:
     port: 50475
   - name: port-12
     port: 50020
+  - name: port-13
+    port: 40555
 ---
 apiVersion: v1
 kind: Pod
@@ -202,6 +204,8 @@ spec:
     port: 50475
   - name: port-12
     port: 50020
+  - name: port-13
+    port: 40555
 ---
 apiVersion: v1
 kind: Pod
