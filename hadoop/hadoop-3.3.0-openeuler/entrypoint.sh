@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -x
 
 svcs_specified=${HADOOP_SERVICES:-""}
 hadoop_controller=${HADOOP_CONTROLLER:-""}
