@@ -11,7 +11,8 @@ metadata:
   namespace: hadoop
 data:
   HADOOP_CONTROLLER: hadoop-controller
-  HOST_NAMES: "hadoop-controller hadoop-worker-arm hadoop-worker-x86"
+  #HOST_NAMES: "hadoop-controller hadoop-worker-arm hadoop-worker-x86"
+  HOST_NAMES: "hadoop-controller hadoop-worker-x86"
 ---
 apiVersion: v1
 kind: Service
@@ -139,7 +140,7 @@ spec:
           memory: "4096Mi"
           cpu: "4096m"
       env:
-        - HOST_NAMES
+        - name: HOST_NAMES
           valueFrom:
             configMapKeyRef:
               name: hadoop-conf
@@ -253,7 +254,7 @@ spec:
 #          memory: "4096Mi"
 #          cpu: "4096m"
 #      env:
-#        - HOST_NAMES
+#        - name: HOST_NAMES
 #          valueFrom:
 #            configMapKeyRef:
 #              name: hadoop-conf
@@ -366,7 +367,7 @@ spec:
           memory: "4096Mi"
           cpu: "4096m"
       env:
-        - HOST_NAMES
+        - name: HOST_NAMES
           valueFrom:
             configMapKeyRef:
               name: hadoop-conf

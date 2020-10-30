@@ -14,7 +14,7 @@ hostnames=${HOST_NAMES:-""}
 
 for hn in $hostnames; do
   ipaddr=$(nslookup *.${hn} | grep -Eo '([0-9]+\.)+[0-9]+' | tail -1)
-  echo "$hn    $ipaddr" | sudo tee -a /etc/hosts
+  echo "$ipaddr    $hn" | sudo tee -a /etc/hosts
 done
 
 function start_svc() {
