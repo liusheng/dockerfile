@@ -8,6 +8,14 @@ if [[ "$hadoop_controller" != "" ]]; then
   sed -i "s/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/core-site.xml
   sed -i "s/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/yarn-site.xml
 fi
+sleep 3
+
+hostnames=${HOST_NAMES:-""}
+
+for hn in $hostnames; do
+  ipaddr=$(nslookup *.${hn} | grep -Eo '([0-9]+\.)+[0-9]+' | tail -1)
+  echo "$hn    $ipaddr" | sudo tee -a /etc/hosts
+done
 
 function start_svc() {
   case $1 in
@@ -35,11 +43,11 @@ function start_svc() {
 }
 [[ $# != 0 ]] && exec "$@"
 
-if [[ "$svcs_specified" == "all" ]];then
+if [[ "$svcs_specified" == "all" ]]; then
   svcs="namenode datanode resourcemanager nodemanager historyserver"
-elif [[ "$svcs_specified" == "controller" ]];then
+elif [[ "$svcs_specified" == "controller" ]]; then
   svcs="namenode resourcemanager historyserver"
-elif [[ "$svcs_specified" == "worker" ]];then
+elif [[ "$svcs_specified" == "worker" ]]; then
   svcs="datanode nodemanager"
 else
   svcs="$svcs_specified"

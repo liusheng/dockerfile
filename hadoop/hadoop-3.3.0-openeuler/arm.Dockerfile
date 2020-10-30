@@ -21,6 +21,7 @@ RUN yum update -y \
         sudo \
         git \
         hostname \
+        bind-utils \
         openssh-server \
         snappy \
         snappy-devel \

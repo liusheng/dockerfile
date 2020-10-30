@@ -20,6 +20,7 @@ RUN yum update -y \
         curl \
         sudo \
         git \
+        bind-utils \
         openssh-server \
         snappy \
         snappy-devel \
