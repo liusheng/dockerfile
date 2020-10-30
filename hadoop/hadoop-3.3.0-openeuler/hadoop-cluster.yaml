@@ -35,6 +35,7 @@ metadata:
 spec:
   selector:
     app: hadoop-controller
+  clusterIP: None
   ports:
   - name: port-0
     port: 8030
@@ -81,6 +82,7 @@ metadata:
 spec:
   selector:
     app: hadoop-worker-arm
+  clusterIP: None
   ports:
   - name: port-1
     port: 8040
@@ -127,6 +129,7 @@ metadata:
 spec:
   selector:
     app: hadoop-worker-x86
+  clusterIP: None
   ports:
   - name: port-1
     port: 8040
