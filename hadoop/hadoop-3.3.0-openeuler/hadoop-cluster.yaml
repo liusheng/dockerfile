@@ -74,6 +74,49 @@ spec:
     port: 37319
   - name: port-19
     port: 40469
+  # Following are yarn AM app port range 60000-60020 according to mapred-site.xml
+  - name: amport-1
+    port: 60000
+  - name: amport-2
+    port: 60001
+  - name: amport-3
+    port: 60002
+  - name: amport-4
+    port: 60003
+  - name: amport-5
+    port: 60004
+  - name: amport-6
+    port: 60005
+  - name: amport-7
+    port: 60006
+  - name: amport-8
+    port: 60007
+  - name: amport-9
+    port: 60008
+  - name: amport-10
+    port: 60009
+  - name: amport-11
+    port: 60010
+  - name: amport-12
+    port: 60011
+  - name: amport-13
+    port: 60012
+  - name: amport-14
+    port: 60013
+  - name: amport-15
+    port: 60014
+  - name: amport-16
+    port: 60015
+  - name: amport-17
+    port: 60016
+  - name: amport-18
+    port: 60017
+  - name: amport-19
+    port: 60018
+  - name: amport-20
+    port: 60019
+  - name: amport-21
+    port: 60020
 ---
 apiVersion: v1
 kind: Pod
@@ -102,7 +145,6 @@ spec:
             configMapKeyRef:
               name: hadoop-conf
               key: HADOOP_CONTROLLER
-
   restartPolicy: Always
 
 ---
@@ -141,6 +183,49 @@ spec:
     port: 50020
   - name: port-13
     port: 40555
+  # Following are yarn AM app port range 60000-60020 according to mapred-site.xml
+  - name: amport-1
+    port: 60000
+  - name: amport-2
+    port: 60001
+  - name: amport-3
+    port: 60002
+  - name: amport-4
+    port: 60003
+  - name: amport-5
+    port: 60004
+  - name: amport-6
+    port: 60005
+  - name: amport-7
+    port: 60006
+  - name: amport-8
+    port: 60007
+  - name: amport-9
+    port: 60008
+  - name: amport-10
+    port: 60009
+  - name: amport-11
+    port: 60010
+  - name: amport-12
+    port: 60011
+  - name: amport-13
+    port: 60012
+  - name: amport-14
+    port: 60013
+  - name: amport-15
+    port: 60014
+  - name: amport-16
+    port: 60015
+  - name: amport-17
+    port: 60016
+  - name: amport-18
+    port: 60017
+  - name: amport-19
+    port: 60018
+  - name: amport-20
+    port: 60019
+  - name: amport-21
+    port: 60020
 ---
 apiVersion: v1
 kind: Pod
@@ -206,6 +291,49 @@ spec:
     port: 50020
   - name: port-13
     port: 40555
+  # Following are yarn AM app port range 60000-60020 according to mapred-site.xml
+  - name: amport-1
+    port: 60000
+  - name: amport-2
+    port: 60001
+  - name: amport-3
+    port: 60002
+  - name: amport-4
+    port: 60003
+  - name: amport-5
+    port: 60004
+  - name: amport-6
+    port: 60005
+  - name: amport-7
+    port: 60006
+  - name: amport-8
+    port: 60007
+  - name: amport-9
+    port: 60008
+  - name: amport-10
+    port: 60009
+  - name: amport-11
+    port: 60010
+  - name: amport-12
+    port: 60011
+  - name: amport-13
+    port: 60012
+  - name: amport-14
+    port: 60013
+  - name: amport-15
+    port: 60014
+  - name: amport-16
+    port: 60015
+  - name: amport-17
+    port: 60016
+  - name: amport-18
+    port: 60017
+  - name: amport-19
+    port: 60018
+  - name: amport-20
+    port: 60019
+  - name: amport-21
+    port: 60020
 ---
 apiVersion: v1
 kind: Pod
