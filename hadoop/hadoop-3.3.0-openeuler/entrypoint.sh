@@ -8,7 +8,8 @@ if [[ "$hadoop_controller" != "" ]]; then
   sed -i "s/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/core-site.xml
   sed -i "s/localhost/$hadoop_controller/g" $HADOOP_HOME/etc/hadoop/yarn-site.xml
 fi
-sleep 3
+
+sleep 5
 
 hostnames=${HOST_NAMES:-""}
 
