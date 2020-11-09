@@ -12,15 +12,16 @@ fi
 sleep 5
 
 hostnames=${HOST_NAMES:-""}
+k8s_namespace=${K8S_NAMESPACE:-"hadoop"}
 
 for hn in $hostnames; do
   ipaddr=""
   count=0
   while ! echo $ipaddr | grep "172."
   do
-    ipaddr=$(nslookup *.${hn} | grep -Eo "([0-9]+\.)+[0-9]+"| tail -1)
+    ipaddr=$(nslookup *.${hn}.${k8s_namespace} | grep -Eo "([0-9]+\.)+[0-9]+"| tail -1)
     let count++
-    [ $count -ge 100 ] && echo "ERROR: cannot query internal IP of $hn after 200s" && break
+    [ $count -ge 150 ] && echo "ERROR: cannot query internal IP of $hn after 300s" && break
     sleep 2
   done
   echo "$ipaddr    $hn" | sudo tee -a /etc/hosts

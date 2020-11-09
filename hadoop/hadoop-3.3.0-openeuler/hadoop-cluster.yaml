@@ -10,9 +10,9 @@ metadata:
   name: hadoop-conf
   namespace: hadoop
 data:
-  HADOOP_CONTROLLER: hadoop-controller
-  HOST_NAMES: "hadoop-controller hadoop-worker-arm hadoop-worker-x86"
-  #HOST_NAMES: "hadoop-controller hadoop-worker-x86"
+  HADOOP_CONTROLLER: controller
+  HOST_NAMES: "controller worker-arm worker-x86"
+  #HOST_NAMES: "controller worker-x86"
 ---
 apiVersion: v1
 kind: Service
@@ -22,7 +22,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: hadoop-controller
+    app: controller
   ports:
     - name: jobhistory
       port: 19888
@@ -30,11 +30,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hadoop-controller
+  name: controller
   namespace: hadoop
 spec:
   selector:
-    app: hadoop-controller
+    app: controller
   clusterIP: None
   ports:
   - name: port-0
@@ -43,17 +43,17 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: hadoop-controller
+  name: controller
   namespace: hadoop
   labels:
-    app: hadoop-controller
+    app: controller
 spec:
   nodeSelector:
-    kubernetes.io/arch: arm64
-    #kubernetes.io/hostname: openeuler-node5-arm64
+    kubernetes.io/arch: x86
+    hadoop-controller: "true"
   containers:
-    - name: hadoop-master
-      image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:aarch64
+    - name: controller
+      image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:x86
       imagePullPolicy: Always
       resources:
         requests:
@@ -77,11 +77,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hadoop-worker-arm
+  name: worker-arm
   namespace: hadoop
 spec:
   selector:
-    app: hadoop-worker-arm
+    app: worker-arm
   clusterIP: None
   ports:
   - name: port-1
@@ -90,16 +90,16 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-    name: hadoop-worker-arm
+    name: worker-arm
     namespace: hadoop
     labels:
-      app: hadoop-worker-arm
+      app: worker-arm
 spec:
   nodeSelector:
     kubernetes.io/arch: arm64
-    #kubernetes.io/hostname: openeuler-node5-arm64
+    hadoop-worker-arm64: "true"
   containers:
-    - name: hadoop-worker-arm
+    - name: worker-arm
       image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:aarch64
       imagePullPolicy: Always
       resources:
@@ -124,11 +124,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hadoop-worker-x86
+  name: worker-x86
   namespace: hadoop
 spec:
   selector:
-    app: hadoop-worker-x86
+    app: worker-x86
   clusterIP: None
   ports:
   - name: port-1
@@ -137,16 +137,16 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-    name: hadoop-worker-x86
+    name: worker-x86
     namespace: hadoop
     labels:
-      app: hadoop-worker-x86
+      app: worker-x86
 spec:
   nodeSelector:
     kubernetes.io/arch: amd64
-    #kubernetes.io/hostname: openeuler-node1-x86
+    hadoop-worker-x86: "true"
   containers:
-    - name: hadoop-worker-x86
+    - name: worker-x86
       image: ghcr.io/liusheng/hadoop-3.3.0-openeuler:x86
       imagePullPolicy: Always
       resources:
