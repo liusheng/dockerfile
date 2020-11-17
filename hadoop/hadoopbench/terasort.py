@@ -50,7 +50,7 @@ def extract_results(jobid, maps, reduces, jhs):
     map_time = jhs["taskSummary"]["map"]["finishTime"] - jhs["taskSummary"]["map"]["startTime"]
     reduce_time = jhs["taskSummary"]["reduce"]["finishTime"] - jhs["taskSummary"]["reduce"]["startTime"]
     total_time = jhs["finishedAt"] - jhs["launchedAt"]
-    return ','.join([jobid, str(maps), str(reduces), str(map_time), str(reduce_time), str(total_time)]) + '\n'
+    return ','.join([jobid, str(maps), str(reduces), str(map_time/1000), str(reduce_time/1000), str(total_time/1000)]) + '\n'
 
 
 def main():
