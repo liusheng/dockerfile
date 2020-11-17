@@ -16,14 +16,17 @@ def add_cli_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--maps',
                         default=100,
+                        type=int,
                         help='The numbers of maps',
                         )
     parser.add_argument('-d', '--datasize',
                         default=5,
+                        type=int,
                         help='The size of data in GB',
                         )
     parser.add_argument('-r', '--reduces',
                         default=100,
+                        type=int,
                         help='The numbers of reduces',
                         )
     parser.add_argument('--input-path',
