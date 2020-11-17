@@ -35,8 +35,13 @@ metadata:
 spec:
   selector:
     app: controller
-  clusterIP: None
   ports:
+  - name: port-hdfs
+    port: 9000
+  - name: port-rm
+    port: 8032
+  - name: port-jhs
+    port: 10020
   - name: port-0
     port: 8030
 ---
@@ -49,7 +54,7 @@ metadata:
     app: controller
 spec:
   nodeSelector:
-    kubernetes.io/arch: x86
+    kubernetes.io/arch: amd64
     hadoop-controller: "true"
   containers:
     - name: controller
