@@ -100,8 +100,8 @@ def main():
     #    float).max()) / (df["total_time"].count() - 2)
 
     df.to_csv(os.path.join(results_dir, "results.csv"))
-    df.to_excel(os.path.join(results_dir, "results.xlsx"))
     df.to_html(os.path.join(results_dir, "results.html"))
+    df.to_excel(os.path.join(results_dir, "results.xlsx"))
 
 
 if __name__ == '__main__':

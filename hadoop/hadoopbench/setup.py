@@ -36,7 +36,8 @@ setup(
         'json',
         'pandas',
         'argparse',
-        'datetime'
+        'datetime',
+        'openpyxl',
     ],
     namespace_packages=[],
     packages=find_packages(),
