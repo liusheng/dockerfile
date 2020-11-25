@@ -104,3 +104,7 @@ RUN if [ "$prebuild" = "true" ]; then \
     && mkdir -p ~/hadoop-results/ \
     && mvn clean install -e -B -Pdist,native -Dtar -DskipTests -Dmaven.javadoc.skip 2>&1 | sudo tee ~/hadoop-results/hadoop_build.log \
     && export PATH=${PATH}:$(readlink -f ~/hadoop/hadoop-dist/target/hadoop-2.7.7/bin); fi
+
+COPY entrypoint.sh /opt/
+RUN sudo chmod +x /opt/entrypoint.sh && sudo chown hadoop.hadoop /opt/entrypoint.sh
+ENTRYPOINT ["/opt/entrypoint.sh"]

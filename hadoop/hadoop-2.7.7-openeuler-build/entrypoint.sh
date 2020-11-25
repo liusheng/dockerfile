@@ -13,3 +13,5 @@ test)
   exec "$@"
   ;;
 esac
+
+tail -f /dev/null
