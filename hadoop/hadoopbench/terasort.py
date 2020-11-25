@@ -87,9 +87,9 @@ def main():
         jobhis_json = json.loads(jobhis_json)
         print(json.dumps(jobhis_json, indent=4))
         df.loc[i] = list(extract_results(jobid, parsed_args.maps, parsed_args.reduces, jobhis_json))
-    df.loc["mean"] = {"map_time": df.loc["map_time"].astype(float).mean(),
-                      "reduce_time": df.loc["reduce_time"].astype(float).mean(),
-                      "total_time": df.loc["total_time"].astype(float).mean()
+    df.loc["mean"] = {"map_time": df["map_time"].astype(float).mean(),
+                      "reduce_time": df["reduce_time"].astype(float).mean(),
+                      "total_time": df["total_time"].astype(float).mean()
                       }
     # If we want to strip min and max of a specified columns
     # (df["reduce_time"].astype(float).sum() - df["reduce_time"].astype(float).min() - df["reduce_time"].astype(
