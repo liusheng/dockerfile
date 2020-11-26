@@ -9,6 +9,7 @@ import datetime
 import json
 import pandas
 import requests
+import time
 
 HADOOP_BINPATH = os.path.dirname(subprocess.check_output(["which", "hadoop"]).strip())
 BENCH_JAR = glob.glob(str(HADOOP_BINPATH, 'utf-8') + "/../share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar")[0]
@@ -82,6 +83,7 @@ def main():
         subprocess.call(terasort_cmd)
         jobid_cmd = "mapred job -list all |grep TeraSort |grep -Eo 'job_[0-9]+_[0-9]+' |sort |tail -1"
         jobid = subprocess.check_output(jobid_cmd, shell=True).strip().decode("utf-8")
+        time.sleep(2)
         jobhis = subprocess.check_output(["mapred", "job", "-history", jobid])
         joblogs = subprocess.check_output(["mapred", "job", "-logs", jobid])
         path = os.path.join(results_dir, jobid)
