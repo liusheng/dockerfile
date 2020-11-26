@@ -8,9 +8,13 @@ import argparse
 import datetime
 import json
 import pandas
+import requests
 
 HADOOP_BINPATH = os.path.dirname(subprocess.check_output(["which", "hadoop"]).strip())
 BENCH_JAR = glob.glob(str(HADOOP_BINPATH, 'utf-8') + "/../share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar")[0]
+
+HADOOP_HOST = "localhost"
+JOBINFO_URL = "http://%s:19888/ws/v1/history/mapreduce/jobs/" % HADOOP_HOST
 
 
 def add_cli_args():
@@ -50,11 +54,13 @@ def add_cli_args():
     return parser
 
 
-def extract_results(jobid, maps, reduces, jhs):
-    map_time = jhs["taskSummary"]["map"]["finishTime"] - jhs["taskSummary"]["map"]["startTime"]
-    reduce_time = jhs["taskSummary"]["reduce"]["finishTime"] - jhs["taskSummary"]["reduce"]["startTime"]
-    total_time = jhs["finishedAt"] - jhs["launchedAt"]
-    return jobid, str(maps), str(reduces), str(map_time / 1000), str(reduce_time / 1000), str(total_time / 1000)
+def extract_results(jobid, maps, reduces, job_info):
+    map_avgtime = str(job_info["job"]["avgMapTime"] / 1000)
+    shuffle_avgtime = str(job_info["job"]["avgShuffleTime"] / 1000)
+    merge_avgtime = str(job_info["job"]["avgMergeTime"] / 1000)
+    reduce_avgtime = str(job_info["job"]["avgReduceTime"] / 1000)
+    total_time = str((job_info["job"]["finishTime"] - job_info["job"]["startTime"]) / 1000)
+    return jobid, str(maps), str(reduces), map_avgtime, shuffle_avgtime, merge_avgtime, reduce_avgtime, total_time
 
 
 def main():
@@ -69,7 +75,8 @@ def main():
     subprocess.call(teragen_cmd)
     reduce_arg = "-Dmapred.reduce.tasks=%s" % parsed_args.reduces
     terasort_cmd = ["hadoop", "jar", BENCH_JAR, "terasort", reduce_arg, parsed_args.input_path, parsed_args.output_path]
-    df = pandas.DataFrame(columns=["jobid", "maps", "reduces", "map_time", "reduce_time", "total_time"])
+    df = pandas.DataFrame(columns=["jobid", "maps", "reduces", "map_avgtime",
+                                   "shuffle_avgtime", "merge_avgtime", "reduce_avgtime", "total_time"])
     for i in range(parsed_args.repeats):
         subprocess.call(["hadoop", "fs", "-rm", "-r", parsed_args.output_path])
         subprocess.call(terasort_cmd)
@@ -83,13 +90,14 @@ def main():
             f.write(jobhis.decode("utf-8"))
         with open(os.path.join(path, "joblogs"), 'w') as f:
             f.write(joblogs.decode("utf-8"))
-        jobhis_json = subprocess.check_output(["mapred", "job", "-history", jobid, "-format", "json"]).decode("utf-8")
-        jobhis_json = json.loads(jobhis_json)
-        print(json.dumps(jobhis_json, indent=4))
-        df.loc[i] = list(extract_results(jobid, parsed_args.maps, parsed_args.reduces, jobhis_json))
-    df.loc["mean"] = {"map_time": df["map_time"].astype(float).mean(),
-                      "reduce_time": df["reduce_time"].astype(float).mean(),
-                      "total_time": df["total_time"].astype(float).mean()
+        job_info = requests.request("GET", JOBINFO_URL + jobid).json()
+        print(json.dumps(job_info, indent=4))
+        df.loc[i] = list(extract_results(jobid, parsed_args.maps, parsed_args.reduces, job_info))
+    df.loc["mean"] = {"map_avgtime": round(df["map_avgtime"].astype(float).mean(), 3),
+                      "shuffle_avgtime": round(df["shuffle_avgtime"].astype(float).mean(), 3),
+                      "merge_avgtime": round(df["merge_avgtime"].astype(float).mean(), 3),
+                      "reduce_avgtime": round(df["reduce_avgtime"].astype(float).mean(), 3),
+                      "total_time": round(df["total_time"].astype(float).mean(), 3),
                       }
     # If we want to strip min and max of a specified columns
     # (df["reduce_time"].astype(float).sum() - df["reduce_time"].astype(float).min() - df["reduce_time"].astype(
