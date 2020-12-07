@@ -95,7 +95,7 @@ def main():
         job_info = requests.request("GET", JOBINFO_URL + jobid).json()
         print(json.dumps(job_info, indent=4))
         df.loc[i] = list(extract_results(jobid, parsed_args.maps, parsed_args.reduces, job_info))
-    df.loc["mean"] = {"map_avgtime": round(df["map_avgtime"].astype(float).mean(), 3),
+    df.loc["avg"] = {"map_avgtime": round(df["map_avgtime"].astype(float).mean(), 3),
                       "shuffle_avgtime": round(df["shuffle_avgtime"].astype(float).mean(), 3),
                       "merge_avgtime": round(df["merge_avgtime"].astype(float).mean(), 3),
                       "reduce_avgtime": round(df["reduce_avgtime"].astype(float).mean(), 3),
