@@ -23,16 +23,16 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
 
-RUN [ "$(uname -p)" == "aarch64" ] && java_home=/usr/lib/jvm/java-8-openjdk-arm64 \
-    || java_home=/usr/lib/jvm/java-8-openjdk-amd64; \
-    echo "export JAVA_HOME=${java_home}" >> ~/.profile; \
-    echo "export JAVA_HOME=${java_home}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
-
 RUN [ "$(uname -p)" == "aarch64" ] && hadoop_dist=${HADOOP_DIST}-aarch64 \
     && curl -L https://downloads.apache.org/hadoop/common/${HADOOP_DIST}/${hadoop_dist}.tar.gz | tar zx
 
 COPY --chown=hadoop:hadoop core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
+
+RUN [ "$(uname -p)" == "aarch64" ] && java_home=/usr/lib/jvm/java-8-openjdk-arm64 \
+    || java_home=/usr/lib/jvm/java-8-openjdk-amd64; \
+    echo "export JAVA_HOME=${java_home}" >> ~/.profile; \
+    echo "export JAVA_HOME=${java_home}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 COPY --chown=hadoop:hadoop entrypoint.sh /home/hadoop/
 RUN chmod +x /home/hadoop/entrypoint.sh
