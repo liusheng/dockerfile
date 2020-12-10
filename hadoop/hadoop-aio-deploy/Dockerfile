@@ -23,8 +23,9 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
 
-RUN [ "$(uname -p)" == "aarch64" ] && hadoop_dist=${HADOOP_DIST}-aarch64 \
-    && curl -L https://downloads.apache.org/hadoop/common/${HADOOP_DIST}/${hadoop_dist}.tar.gz | tar zx
+RUN [ "$(uname -p)" == "aarch64" ] && hadoop_tar=${HADOOP_DIST}-aarch64.tar.gz \
+    || hadoop_tar=${HADOOP_DIST}.tar.gz; \
+    curl -L https://downloads.apache.org/hadoop/common/${HADOOP_DIST}/${hadoop_tar} | tar zx
 
 COPY --chown=hadoop:hadoop core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml $HADOOP_HOME/etc/hadoop/
 ENV PATH "${PATH}:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
