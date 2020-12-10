@@ -26,7 +26,7 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
 RUN [ "$(uname -p)" == "aarch64" ] && java_home=/usr/lib/jvm/java-8-openjdk-arm64 \
     || java_home=/usr/lib/jvm/java-8-openjdk-amd64; \
     echo "export JAVA_HOME=${java_home}" >> ~/.profile; \
-    echo "export JAVA_HOME=${JAVA_HOME}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+    echo "export JAVA_HOME=${java_home}" >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 RUN [ "$(uname -p)" == "aarch64" ] && hadoop_dist=${HADOOP_DIST}-aarch64 \
     && curl -L https://downloads.apache.org/hadoop/common/${HADOOP_DIST}/${hadoop_dist}.tar.gz | tar zx
