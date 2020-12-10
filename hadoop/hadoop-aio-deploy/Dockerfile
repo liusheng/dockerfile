@@ -6,13 +6,10 @@ ARG HADOOP_DIST=hadoop-3.3.0
 
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
-        openssh-server \
-        sudo \
-        openjdk-8-jdk \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+       openssh-server sudo curl openjdk-8-jdk curl vim
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
+#ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
+#ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 ENV HADOOP_HOME /home/hadoop/${HADOOP_DIST}
 
@@ -25,6 +22,9 @@ WORKDIR /home/hadoop
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
+
+RUN [ "$(uname -p)" == "aarch64" ] && echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64" >> ~/.profile \
+    || echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.profile
 
 RUN [ "$(uname -p)" == "aarch64" ] && hadoop_dist=${HADOOP_DIST}-aarch64 \
     && curl -L https://downloads.apache.org/hadoop/common/${HADOOP_DIST}/${hadoop_dist}.tar.gz | tar zx
