@@ -34,6 +34,9 @@ setup(
     install_requires=[
         'argparse',
         'json',
+        'Cython',
+        'numpy',
+        'openpyxl',
         'pandas',
         'argparse',
         'datetime',
