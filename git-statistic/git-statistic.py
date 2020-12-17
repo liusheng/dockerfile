@@ -19,6 +19,7 @@ def add_cli_args():
                         help='Only show results before the given time, ISO8601 format:YYYY-MM-DDTHH:MM:SSZ',
                         )
     parser.add_argument('--token',
+                        required=True,
                         help='Github auth token',
                         )
     return parser
