@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-PROJECT = 'hadoopbench'
+PROJECT = 'git-statistic'
 
 VERSION = '0.1'
 
@@ -29,7 +29,7 @@ setup(
 
     scripts=[],
 
-    provides=['hadoopbench',
+    provides=['git-statistic',
               ],
     install_requires=[
         'argparse',
@@ -40,6 +40,7 @@ setup(
         'argparse',
         'datetime',
         'openpyxl',
+        'pygithub',
     ],
     namespace_packages=[],
     packages=find_packages(),
