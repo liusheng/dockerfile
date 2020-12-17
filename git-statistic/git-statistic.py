@@ -18,17 +18,20 @@ def add_cli_args():
                         default='2020-12-31T00:00:00Z',
                         help='Only show results before the given time, ISO8601 format:YYYY-MM-DDTHH:MM:SSZ',
                         )
+    parser.add_argument('--token',
+                        help='Github auth token',
+                        )
     return parser
 
 
-def stats_github(repo_name, since, until):
+def stats_github(repo_name, since, until, token):
     base_url = "https://api.github.com/repos/%s/commits"
     url = base_url % repo_name
     contributors = []
     url = url + "?since=" + since + "&until=" + until + "&per_page=100"
     while True:
         print("Query commits stats from github: %s" % url)
-        resp = requests.request("GET", url, auth=HTTPBasicAuth('liusheng', '91db09ac417505337b8e87af216f196c68991637'))
+        resp = requests.request("GET", url, auth=HTTPBasicAuth('liusheng', token))
         if resp.status_code != 200:
             raise Exception(resp.text)
         if resp.status_code == 404:
@@ -53,7 +56,7 @@ def main():
         if 'github' in str(repo):
             repo = list(filter(lambda s: "github.com" in s, repo.splitlines()))[0]
             repo_name = repo.partition("github.com/")[2].replace(".git", "")
-            statistics = stats_github(repo_name, parsed_args.since, parsed_args.until)
+            statistics = stats_github(repo_name, parsed_args.since, parsed_args.until, parsed_args.token)
             df.loc[row[0], "commits_6months"] = statistics[0]
             df.loc[row[0], "contributors_6months"] = statistics[1]
 
