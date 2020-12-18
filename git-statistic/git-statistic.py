@@ -55,8 +55,9 @@ def main():
         repo = row[1]["Repository"]
         print("=" * 100)
         print("Start to process project: %s, repo: %s" % (row[1]["Project"], repo))
-        if 'github' in str(repo):
-            repo = list(filter(lambda s: "github.com" in s, repo.splitlines()))[0]
+        repo = list(filter(lambda s: "github.com" in s, repo.splitlines()))
+        if repo:
+            repo = repo[0]
             repo_name = repo.partition("github.com/")[2].replace(".git", "")
             statistics = stats_github(repo_name, parsed_args.since, parsed_args.until, parsed_args.token)
             df.loc[row[0], "commits_6months"] = statistics[0]
