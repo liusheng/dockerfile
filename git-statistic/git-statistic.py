@@ -48,14 +48,14 @@ def stats_github(repo_name, since, until, token):
 
 def main():
     parsed_args = add_cli_args().parse_args()
-    row_data = pandas.read_excel("ARM CI Plan.xlsx", engine="openpyxl")
+    row_data = pandas.read_excel("ARM CI Plan.xlsx", sheet_name="Project schedule", engine="openpyxl")
     df = pandas.DataFrame(row_data, columns=["Project", "Repository"])
 
     for row in df.iterrows():
         repo = row[1]["Repository"]
         print("=" * 100)
         print("Start to process project: %s, repo: %s" % (row[1]["Project"], repo))
-        repo = list(filter(lambda s: "github.com" in s, repo.splitlines()))
+        repo = list(filter(lambda s: "github.com" in s, str(repo).splitlines()))
         if repo:
             repo = repo[0]
             repo_name = repo.partition("github.com/")[2].replace(".git", "")
