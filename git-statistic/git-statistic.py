@@ -33,11 +33,11 @@ def stats_github(repo_name, since, until, token):
     while True:
         print("Query commits stats from github: %s" % url)
         resp = requests.request("GET", url, auth=HTTPBasicAuth('liusheng', token))
-        if resp.status_code != 200:
-            raise Exception(resp.text)
         if resp.status_code == 404:
             print("NotFound ERROR: %s" % resp.text)
             return 0, 0
+        if resp.status_code != 200:
+            raise Exception(resp.text)
         contributors.extend([c['commit']['author']['name'] for c in resp.json()])
         if 'next' not in resp.links:
             break
