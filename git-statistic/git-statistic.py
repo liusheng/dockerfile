@@ -7,7 +7,7 @@ import requests
 from github import Github  # https://pygithub.readthedocs.io/en/latest/examples.html
 from requests.auth import HTTPBasicAuth
 
-CAL_ORGS = ["OpenStack", "Spring Cloud"]
+CAL_ORGS = ["OpenStack", "Spring Cloud", "aosp-mirror"]
 
 
 def add_cli_args():

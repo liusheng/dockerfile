@@ -1,4 +1,4 @@
-FROM liusheng2048/kudu-aarch64:no3rd
+FROM ghcr.io/liusheng/kudu-aarch64:no3rd
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
