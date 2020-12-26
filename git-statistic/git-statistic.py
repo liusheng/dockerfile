@@ -45,7 +45,7 @@ def stats_github(repo_name, since, until, token):
             break
         url = resp.links['next']['url']
 
-    return len(contributors), len(set(contributors))
+    return contributors
 
 
 def get_org_repos(org, token):
@@ -83,14 +83,13 @@ def main():
             repos = get_org_repos(repos[0], parsed_args.token)
         else:
             repos = repos[:1]
-        commits, contributors = 0, 0
+        commits_authors = []
         for repo_name in repos:
             statistics = stats_github(repo_name, parsed_args.since, parsed_args.until, parsed_args.token)
-            commits += statistics[0]
-            contributors += statistics[1]
+            commits_authors.extend(statistics)
 
-        df.loc[row[0], "commits_6months"] = commits
-        df.loc[row[0], "contributors_6months"] = contributors
+        df.loc[row[0], "commits_6months"] = len(commits_authors)
+        df.loc[row[0], "contributors_6months"] = len(set(commits_authors))
 
         print("Finish processing project: %s" % row[1]["Project"])
 
