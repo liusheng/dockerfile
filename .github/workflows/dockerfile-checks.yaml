@@ -12,4 +12,4 @@ jobs:
       - name: Lint
         run: |
           cd kudu-aarch64
-          docker run --rm -i hadolint/hadolint < Dockerfile
+          docker run --rm -i hello-world
