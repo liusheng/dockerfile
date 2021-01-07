@@ -10,4 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Lint
-        run: docker run --rm -i ghcr.io/hadolint/hadolint < kudu-aarch64/Dockerfile
+        run: |
+          cd kudu-aarch64
+          docker run --rm -i hadolint/hadolint < kudu-aarch64/Dockerfile
