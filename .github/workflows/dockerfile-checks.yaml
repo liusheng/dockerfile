@@ -1,0 +1,13 @@
+name: dockerfile checks
+
+on: push
+
+jobs:
+  dockerfile-check:
+    name: Check Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Lint
+        run: docker run --rm -i hadolint/hadolint < kudu-aarch64/Dockerfile
