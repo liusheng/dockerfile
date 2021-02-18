@@ -52,7 +52,7 @@ RUN apt-get -q update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m -d /home/storm -s /bin/bash storm && echo storm:storm | chpasswd && adduser storm sudo
+RUN useradd -m -d /home/storm -s /bin/bash storm && adduser storm sudo
 RUN echo "storm ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER storm
 WORKDIR /home/storm

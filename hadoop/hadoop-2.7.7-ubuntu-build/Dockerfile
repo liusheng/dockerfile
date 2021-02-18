@@ -90,7 +90,7 @@ ENV PATH "${PATH}:/opt/protobuf/bin"
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-arm64
 
-RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
+RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && adduser hadoop sudo
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hadoop

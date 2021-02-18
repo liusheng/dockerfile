@@ -116,7 +116,8 @@ RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-mav
 
 ########## For Hbase building ###################
 
-RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
+RUN groupadd hadoop
+RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hadoop

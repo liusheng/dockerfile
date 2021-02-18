@@ -85,7 +85,8 @@ ENV PATH "${PATH}:/opt/protobuf-3.7.1/bin"
 
 ########## For Hbase building ###################
 
-RUN useradd -m -d /home/hadoop -s /bin/bash hadoop && echo hadoop:hadoop | chpasswd && adduser hadoop sudo
+RUN groupadd hadoop
+RUN useradd -m -d /home/hadoop -s /bin/bash hadoop -g hadoop
 RUN echo "hadoop ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hadoop

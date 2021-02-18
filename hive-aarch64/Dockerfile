@@ -19,7 +19,7 @@ RUN echo /opt/protobuf-2.5.0/lib/ > /etc/ld.so.conf.d/protobuf-2.5.0.conf && ldc
 ENV PROTOBUF_HOME /opt/protobuf-2.5.0
 ENV PATH "${PATH}:/opt/protobuf-2.5.0/bin"
 
-RUN useradd -m -d /home/hive -s /bin/bash hive && echo hive:hive | chpasswd && adduser hive sudo
+RUN useradd -m -d /home/hive -s /bin/bash hive && adduser hive sudo
 RUN echo "hive ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hive

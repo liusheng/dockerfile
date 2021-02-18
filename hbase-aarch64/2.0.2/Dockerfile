@@ -42,7 +42,7 @@ RUN curl -sL https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-mav
 ENV PATH "${PATH}:/opt/protobuf-3.5.1.1/bin/"
 ########## For Hbase building ###################
 
-RUN useradd -m -d /home/hbase -s /bin/bash hbase && echo hbase:hbase | chpasswd && adduser hbase sudo
+RUN useradd -m -d /home/hbase -s /bin/bash hbase && adduser hbase sudo
 RUN echo "hbase ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER hbase
