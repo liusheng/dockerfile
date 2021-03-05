@@ -14,7 +14,7 @@ RUN apt-get -q update \
         autoconf \
         automake \
         libtool \
-        cmake \
+        `cmake` \
         zlib1g-dev \
         pkg-config \
         libssl-dev \

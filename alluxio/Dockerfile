@@ -4,8 +4,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
-    sudo git maven openjdk-11-jdk curl \
-    iputils-ping vim openssh-server
+    maven openjdk-11-jdk cmake g++ python openssh-server \
+    sudo git iputils-ping vim curl
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 
 RUN groupadd alluxio
