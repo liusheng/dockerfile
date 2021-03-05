@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
     openjdk-8-jdk maven \
-    sudo git iputils-ping vim curl
+    sudo git iputils-ping vim curl openssh-server
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
 
