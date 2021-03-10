@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
-    maven openjdk-11-jdk cmake g++ python openssh-server \
+    maven openjdk-11-jdk cmake make g++ python openssh-server \
     sudo git iputils-ping vim curl
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 
@@ -14,6 +14,8 @@ RUN echo "accumulo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER accumulo
 WORKDIR /home/accumulo
+# Need to set USER env for tests running of SiteConfigurationTest
+ENV USER accumulo
 
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
