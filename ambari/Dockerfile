@@ -4,9 +4,15 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
-    maven openjdk-8-jdk cmake make g++ python openssh-server \
+    cmake make g++ python openssh-server \
     sudo git iputils-ping vim curl
+
+RUN apt-get -q update \
+    && apt-get -q install -y --no-install-recommends openjdk-8-jdk
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-arm64
+
+RUN apt-get -q update && apt-get -q install -y maven
 
 RUN groupadd ambari
 RUN useradd -m -d /home/ambari -s /bin/bash ambari -g ambari
