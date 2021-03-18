@@ -27,4 +27,5 @@ jobs:
       - name: Get K8S cluster config
         run: |
           kubectl version
+          echo "Test"
 
