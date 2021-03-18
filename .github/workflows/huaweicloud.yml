@@ -1,0 +1,30 @@
+name: Test build on Huaweicloud swr
+
+on: push
+
+env:
+  ACESS_KEY_ID: ${{ secrets.ACESS_KEY_ID }}
+  SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+  REGION: ${{ secrets.REGION }}
+
+jobs:
+  huaweicloud-swr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to SWR
+        run: |
+          docker login -u "${REGION}@${ACESS_KEY_ID}" -p "${SECRET_ACCESS_KEY}" "swr.${REGION}.myhuaweicloud.com"
+
+      - name: Get kubectl
+        run: |
+          curl -sL https://dl.k8s.io/v1.15.11/kubernetes-client-linux-amd64.tar.gz | tar zx -C ~/
+          export PATH=PATH:kubernetes/client/bin
+
+      - name: Get K8S cluster config
+        run: |
+          kubectl version
+

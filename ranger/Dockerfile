@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
