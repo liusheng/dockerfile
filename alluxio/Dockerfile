@@ -20,3 +20,6 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && chmod 0600 ~/.ssh/authorized_keys
 
 #ENV MAVEN_OPTS -Xms256m -Xmx1536m
+CMD git clone https://github.com/apache/alluxio \
+    && cd alluxio \
+    && mvn -e install

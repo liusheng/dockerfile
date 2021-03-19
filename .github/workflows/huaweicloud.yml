@@ -7,6 +7,8 @@ env:
   SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
   REGION: ap-southeast-3
   KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+  ALLUXIO_IMG: ghcr.io/liusheng/alluxio-aarch64
+  DEPLOYMENT_NAME: alluxio-deployment
 
 jobs:
   huaweicloud-swr:
@@ -33,3 +35,15 @@ jobs:
           export KUBECONFIG=~/.kube/config
           kubectl config use-context external
           kubectl cluster-info
+
+      # 3.2 Deploy the image to the ACK cluster
+      - name: Set up Kustomize
+        run: |-
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash /dev/stdin 3.8.6
+
+      - name: Deploy
+        run: |-
+          ./kustomize edit set image REGISTRY/NAMESPACE/IMAGE:TAG=${ALLUXIO_IMG}:latest
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/${DEPLOYMENT_NAME}
+          kubectl get services -o wide
