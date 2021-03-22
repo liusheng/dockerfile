@@ -1,6 +1,4 @@
-#FROM ubuntu:bionic
 FROM ubuntu:focal
-#FROM ubuntu:xenial
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
@@ -54,11 +52,21 @@ ENV JAVA8_HOME /usr/lib/jvm/java-8-openjdk-arm64
 
 WORKDIR /opt
 
-ARG build3rddeps=false
-ARG build_type=''
-RUN if [ "$build3rddeps" = "true" ]; then git clone https://github.com/apache/kudu \
+ENV PARALLEL 4
+#enlarge default timeout from 900 to 1800
+ENV TEST_TIMEOUT_SECS 1800
+
+# For TSAN: 3rdparty_type=tsan {common uninstrumented tsan}, default is: common uninstrumented
+ARG build_type=""
+
+RUN git clone https://github.com/apache/kudu \
     && cd kudu \
-    && bash -ex thirdparty/build-if-necessary.sh $build_type 2>&1 |tee -a /opt/kudu-build3rd.log; fi
+    && bash -ex thirdparty/build-if-necessary.sh $build_type 2>&1 |tee -a ~/kudu-build3rd.log \
+    && mkdir -p /opt/results/debug \
+    && mkdir -p build/debug \
+    && cd build/debug \
+    && ../../thirdparty/installed/common/bin/cmake -DCMAKE_BUILD_TYPE=DEBUG ../.. \
+    && make -j4
 
 COPY entrypoint.sh /opt/
 RUN chmod +x /opt/entrypoint.sh
