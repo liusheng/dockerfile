@@ -53,4 +53,4 @@ jobs:
       - name: Run with specific image
         run: |-
           kubectl config use-context external
-          kubectl run -i --rm --attach alluxio-build-$RANDOM --image "${{ env.ALLUXIO_IMG }}"
+          kubectl run --rm -it --image "${{ env.ALLUXIO_IMG }}":latest alluxio-build-$RANDOM
