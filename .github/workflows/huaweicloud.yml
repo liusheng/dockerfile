@@ -8,9 +8,7 @@ env:
   REGION: "ap-southeast-3"
   PROJECT_ID: "c847fb717563484fa95d18a75ae7831c"
   CLUSTER_ID: "0803769d-8dd3-11eb-9282-0255ac1001e6"
-
-  ALLUXIO_IMG: ghcr.io/liusheng/alluxio-aarch64
-  DEPLOYMENT_NAME: alluxio-deployment
+  ALLUXIO_IMG: "ghcr.io/liusheng/alluxio-aarch64:latest"
 
 jobs:
   huaweicloud-swr:
@@ -48,16 +46,11 @@ jobs:
           cluster-id: "${{ env.CLUSTER_ID }}"
 
       # Deploy the image to the CCE cluster
-      - name: Set up Kustomize
-        run: |-
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash /dev/stdin 4.0.5
+#      - name: Set up Kustomize
+#        run: |-
+#          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash /dev/stdin 4.0.5
 
-      - name: Deploy
+      - name: Run with specific image
         run: |-
           kubectl config use-context external
-          kubectl get all
-#          touch kustomization.yaml
-#          ./kustomize edit set image "REGISTRY/NAMESPACE/IMAGE:TAG=${ALLUXIO_IMG}:latest"
-#          ./kustomize build . | kubectl apply -f -
-#          kubectl rollout status deployment/${DEPLOYMENT_NAME}
-#          kubectl get services -o wide
+          kubectl run -i --attach alluxio-build --image "${{ env.SECRET_ACCESS_KEY }}"
