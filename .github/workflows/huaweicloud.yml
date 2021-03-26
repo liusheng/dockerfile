@@ -3,10 +3,12 @@ name: Test build on Huaweicloud swr
 on: push
 
 env:
-  ACESS_KEY_ID: ${{ secrets.ACESS_KEY_ID }}
+  ACESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
   SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
-  REGION: ap-southeast-3
-  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+  REGION: "ap-southeast-3"
+  PROJECT_ID: "c847fb717563484fa95d18a75ae7831c"
+  CLUSTER_ID: "0803769d-8dd3-11eb-9282-0255ac1001e6"
+
   ALLUXIO_IMG: ghcr.io/liusheng/alluxio-aarch64
   DEPLOYMENT_NAME: alluxio-deployment
 
@@ -18,34 +20,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Login to SWR
-        run: |
-          docker login -u "${REGION}@${ACESS_KEY_ID}" -p "${SECRET_ACCESS_KEY}" "swr.${REGION}.myhuaweicloud.com"
+      # 1.1 (optional) login to SWR and upload customized image
+      - uses: liusheng/swr-login@v0.0.1
+        with:
+          region: "${{ env.REGION }}"
+          access-key-id: "${{ env.ACCESS_KEY_ID }}"
+          access-key-secret: "${{ env.SECRET_ACCESS_KEY }}"
+
+      # 1.2 (optional) Build and push image to ACR
+#      - name: Build and push image to ACR
+#        run: |
+#           docker pull ghcr.io/liusheng/xxx
+#          docker build --tag "$REGISTRY/$NAMESPACE/$IMAGE:$TAG" .
+#          docker push "$REGISTRY/$NAMESPACE/$IMAGE:$TAG"
 
       - name: Get kubectl
         run: |
           curl -sL https://dl.k8s.io/v1.15.11/kubernetes-client-linux-amd64.tar.gz | tar zx -C $HOME/
           export PATH=PATH:$HOME/kubernetes/client/bin
 
-      - name: Get K8S cluster config
-        run: |
-          kubectl version
-          mkdir -p $HOME/.kube
-          echo ${KUBE_CONFIG} > $HOME/.kube/config
-          export KUBECONFIG=~/.kube/config
-          kubectl config use-context external
-          kubectl cluster-info
-          cat $HOME/.kube/config
+      - uses: liusheng/cce-context@v0.0.1
+        with:
+          region: "${{ env.REGION }}"
+          access-key-id: "${{ env.ACCESS_KEY_ID }}"
+          access-key-secret: "${{ env.SECRET_ACCESS_KEY }}"
+          project-id: "${{ env.PROJECT_ID }}"
+          cluseter-id: "${{ env.CLUSTER_ID }}"
 
-      # 3.2 Deploy the image to the ACK cluster
+      # Deploy the image to the CCE cluster
       - name: Set up Kustomize
         run: |-
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash /dev/stdin 4.0.5
 
       - name: Deploy
         run: |-
-          touch kustomization.yaml
-          ./kustomize edit set image "REGISTRY/NAMESPACE/IMAGE:TAG=${ALLUXIO_IMG}:latest"
-          ./kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/${DEPLOYMENT_NAME}
-          kubectl get services -o wide
+          kubectl use-context external
+          kubectl get all
+#          touch kustomization.yaml
+#          ./kustomize edit set image "REGISTRY/NAMESPACE/IMAGE:TAG=${ALLUXIO_IMG}:latest"
+#          ./kustomize build . | kubectl apply -f -
+#          kubectl rollout status deployment/${DEPLOYMENT_NAME}
+#          kubectl get services -o wide
