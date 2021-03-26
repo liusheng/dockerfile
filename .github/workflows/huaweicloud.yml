@@ -45,7 +45,7 @@ jobs:
           access-key-id: "${{ env.ACCESS_KEY_ID }}"
           access-key-secret: "${{ env.SECRET_ACCESS_KEY }}"
           project-id: "${{ env.PROJECT_ID }}"
-          cluseter-id: "${{ env.CLUSTER_ID }}"
+          cluster-id: "${{ env.CLUSTER_ID }}"
 
       # Deploy the image to the CCE cluster
       - name: Set up Kustomize
