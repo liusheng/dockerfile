@@ -53,4 +53,4 @@ jobs:
       - name: Run with specific image
         run: |-
           kubectl config use-context external
-          kubectl run -i --attach alluxio-build --image "${{ env.SECRET_ACCESS_KEY }}"
+          kubectl run -i --attach alluxio-build --image "${{ env.ALLUXIO_IMG }}"
