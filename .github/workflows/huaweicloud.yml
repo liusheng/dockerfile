@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          kubectl use-context external
+          kubectl config use-context external
           kubectl get all
 #          touch kustomization.yaml
 #          ./kustomize edit set image "REGISTRY/NAMESPACE/IMAGE:TAG=${ALLUXIO_IMG}:latest"
