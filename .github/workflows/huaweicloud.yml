@@ -27,7 +27,7 @@ jobs:
 
       - name: Test secret
         run: |
-          ls -l /tmp/docker_login*
+          ls -l /tmp/ |grep docker
           cat $?
 
       # 1.2 (optional) Build and push image to ACR
@@ -52,7 +52,7 @@ jobs:
 
       - name: Test secret k8s
         run: |
-          ls -l /tmp/kubeconfig_*
+          ls -l /tmp/ |grep kube
           cat $?
 
 #      - name: Run with specific image
