@@ -27,7 +27,7 @@ jobs:
 
       - name: Test secret
         run: |
-          ls -l $DOCKER_CONFIG
+          cat $DOCKER_CONFIG/config.json
 
       # 1.2 (optional) Build and push image to ACR
 #      - name: Build and push image to ACR
@@ -51,7 +51,6 @@ jobs:
 
       - name: Test secret k8s
         run: |
-          ls -l /tmp/ |grep kube
           cat $KUBECONFIG
 
 #      - name: Run with specific image
