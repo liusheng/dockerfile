@@ -25,10 +25,6 @@ jobs:
           access-key-id: "${{ env.ACCESS_KEY_ID }}"
           access-key-secret: "${{ env.SECRET_ACCESS_KEY }}"
 
-#      - name: Test secret
-#        run: |
-#          cat $DOCKER_CONFIG/config.json
-
       # 1.2 (optional) Build and push image to ACR
 #      - name: Build and push image to ACR
 #        run: |
@@ -49,12 +45,7 @@ jobs:
           project-id: "${{ env.PROJECT_ID }}"
           cluster-id: "${{ env.CLUSTER_ID }}"
 
-      - name: Test secret k8s
-        run: |
-          echo "${{ env.ACCESS_KEY_ID }}" > /tmp/aaaa
-          cat /tmp/aaaa
-#          cat $KUBECONFIG
-#      - name: Run with specific image
-#        run: |-
-#          kubectl config use-context external
-#          kubectl run --rm -i --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
+      - name: Run with specific image
+        run: |-
+          kubectl config use-context external
+          kubectl run --rm -i --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
