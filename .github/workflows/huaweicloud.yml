@@ -27,7 +27,7 @@ jobs:
 
       - name: Test secret
         run: |
-          cat $DOCKER_CONFIG
+          ls -l $DOCKER_CONFIG
 
       # 1.2 (optional) Build and push image to ACR
 #      - name: Build and push image to ACR
