@@ -7,7 +7,7 @@ env:
   SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
   REGION: "ap-southeast-3"
   PROJECT_ID: "c847fb717563484fa95d18a75ae7831c"
-  CLUSTER_ID: "0803769d-8dd3-11eb-9282-0255ac1001e6"
+  CLUSTER_ID: "9d7098aa-8e97-11eb-8437-0255ac1001d6"
   ALLUXIO_IMG: "ghcr.io/liusheng/alluxio-aarch64:latest"
 
 jobs:
@@ -24,6 +24,11 @@ jobs:
           region: "${{ env.REGION }}"
           access-key-id: "${{ env.ACCESS_KEY_ID }}"
           access-key-secret: "${{ env.SECRET_ACCESS_KEY }}"
+
+      - name: Test secret
+        run: |
+          ls -l /tmp/docker_login*
+          cat $?
 
       # 1.2 (optional) Build and push image to ACR
 #      - name: Build and push image to ACR
@@ -45,12 +50,12 @@ jobs:
           project-id: "${{ env.PROJECT_ID }}"
           cluster-id: "${{ env.CLUSTER_ID }}"
 
-      # Deploy the image to the CCE cluster
-#      - name: Set up Kustomize
-#        run: |-
-#          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash /dev/stdin 4.0.5
+      - name: Test secret k8s
+        run: |
+          ls -l /tmp/kubeconfig_*
+          cat $?
 
-      - name: Run with specific image
-        run: |-
-          kubectl config use-context external
-          kubectl run --rm -i --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
+#      - name: Run with specific image
+#        run: |-
+#          kubectl config use-context external
+#          kubectl run --rm -i --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
