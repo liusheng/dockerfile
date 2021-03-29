@@ -12,18 +12,17 @@ RUN apt-get -q update \
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 
-# Install maven 3.6.3 (Ranger require Maven version >= 3.6.3)
-RUN curl -sL https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz | tar zx -C $HOME
-ENV MAVEN_HOME $HOME/apache-maven-3.6.3/
-ENV PATH "$HOME/apache-maven-3.2.5/bin:${PATH}"
-
-
 RUN groupadd ranger
 RUN useradd -m -d /home/ranger -s /bin/bash ranger -g ranger
 RUN echo "ranger ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER ranger
 WORKDIR /home/ranger
+
+# Install maven 3.6.3 (Ranger require Maven version >= 3.6.3)
+RUN curl -sL https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz | tar zx -C $HOME
+ENV MAVEN_HOME $HOME/apache-maven-3.6.3/
+ENV PATH "$HOME/apache-maven-3.2.5/bin:${PATH}"
 
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
