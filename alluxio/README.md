@@ -1,8 +1,8 @@
 
 ```shell script
-docker build . -t alluxio-build
+docker build . -t ghcr.io/liusheng/alluxio-aarch64
 ```
 
 ```shell script
-docker run --name alluxio-build --hostname alluxio-build --privileged=true -it alluxio-aarch64 bash
+docker run --name alluxio-build --hostname alluxio-build --privileged=true -it ghcr.io/liusheng/alluxio-aarch64 bash
 ```

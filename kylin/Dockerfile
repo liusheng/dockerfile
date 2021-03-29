@@ -23,3 +23,7 @@ WORKDIR /home/kylin
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
+
+CMD git clone https://github.com/apache/kylin \
+    && cd kylin \
+    && mvn -e install
