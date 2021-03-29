@@ -25,4 +25,7 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
     && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
     && chmod 0600 ~/.ssh/authorized_keys
 
+CMD git clone https://github.com/apache/ambari \
+    && cd ambari \
+    && mvn -e install
 #ENV MAVEN_OPTS -Xms256m -Xmx1536m

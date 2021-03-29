@@ -1,6 +1,9 @@
 name: Test build on Huaweicloud swr
 
-on: push
+on:
+  pull_request:
+    branches:
+      - master
 
 env:
   ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
