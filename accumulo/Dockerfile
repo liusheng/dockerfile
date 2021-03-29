@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
     maven openjdk-11-jdk cmake make g++ python openssh-server \
-    sudo git iputils-ping vim curl
+    sudo git
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-arm64
 
 RUN groupadd accumulo
