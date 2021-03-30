@@ -10,7 +10,7 @@ env:
   SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
   REGION: "ap-southeast-3"
   PROJECT_ID: "c847fb717563484fa95d18a75ae7831c"
-  CLUSTER_ID: "9d7098aa-8e97-11eb-8437-0255ac1001d6"
+  CLUSTER_ID: "15038c63-90f3-11eb-a9c4-0255ac1001e7"
   ALLUXIO_IMG: "ghcr.io/liusheng/alluxio-aarch64:latest"
 
 jobs:
@@ -51,4 +51,4 @@ jobs:
       - name: Run with specific image
         run: |-
           kubectl config use-context external
-          kubectl run --rm -i --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
+          kubectl run --rm -i --privileged=true --image "${{ env.ALLUXIO_IMG }}" alluxio-build-$RANDOM
