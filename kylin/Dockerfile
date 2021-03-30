@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get -q update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
-    sudo git
+    sudo git openssh-server
 
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends openjdk-8-jdk
