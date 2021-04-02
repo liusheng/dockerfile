@@ -104,7 +104,6 @@ RUN wget -qc https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka-${KAFKA_V
     && rm -fr ${WORK_DIR}/kafka-${KAFKA_VERSION}-src
 
 # setup livy
-RUN wget -O https://downloads.apache.org/incubator/livy/${LIVY_VERSION}-incubating/apache-livy-${LIVY_VERSION}-incubating-src.zip \
-    && unzip apache-livy-${LIVY_VERSION}-incubating-src.zip \
-    && cd apache-livy-${LIVY_VERSION}-incubating \
-    && mvn package -DskipTests
+RUN wget https://downloads.apache.org/incubator/livy/${LIVY_VERSION}-incubating/apache-livy-${LIVY_VERSION}-incubating-bin.zip \
+    && unzip apache-livy-${LIVY_VERSION}-incubating-bin.zip \
+    && rm apache-livy-${LIVY_VERSION}-incubating-bin.zip
