@@ -45,7 +45,7 @@ WORKDIR $WORK_DIR
 # Install dependencies
 RUN apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
-       openssh-server sudo openjdk-8-jdk lsof tar mysql-server npm curl
+       openssh-server sudo openjdk-8-jdk lsof tar mysql-server npm curl wget git
 
 # Install Maven
 RUN wget -qc https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -O - | tar zx -C $WORK_DIR
@@ -98,7 +98,7 @@ RUN wget -qc https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${S
 RUN wget -qc https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka-${KAFKA_VERSION}-src.tgz  -O - | tar -xz -C $WORK_DIR \
     && cd ${WORK_DIR}/kafka-${KAFKA_VERSION}-src \
     && ./gradlew clean releaseTarGz \
-    && cp ${WORK_DIR}/kafka-${KAFKA_VERSION}-src/core/build/distributions/*.tgz ${WORK_DIR}/
+    && cp ${WORK_DIR}/kafka-${KAFKA_VERSION}-src/core/build/distributions/*.tgz ${WORK_DIR}/ \
     && cd ${WORK_DIR} \
     && tar -zxf kafka_2.13-${KAFKA_VERSION}.tgz \
     && rm -fr ${WORK_DIR}/kafka-${KAFKA_VERSION}-src
