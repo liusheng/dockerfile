@@ -62,48 +62,54 @@ RUN wget -qc https://github.com/liusheng/package/releases/download/protobuf-aarc
 #ENV PATH "${PATH}:$WORK_DIR/protobuf-2.5.0/bin"
 
 # setup hbase
-RUN wget -qc https://downloads.apache.org/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-src.tar.gz -O - | tar -xz -C $WORK_DIR \
-    && cd hbase-${HBASE_VERSION} \
-    && mvn install -DskipTests assembly:single -Prelease \
-    && cp $WORK_DIR/hbase-${HBASE_VERSION}/hbase-assembly/target/hbase-${HBASE_VERSION}-bin.tar.gz $WORK_DIR/ \
-    && cd $WORK_DIR \
-    && rm -fr hbase-${HBASE_VERSION} \
-    && tar zxf hbase-${HBASE_VERSION}-bin.tar.gz \
-    && rm hbase-${HBASE_VERSION}-bin.tar.gz
+#RUN wget -qc https://downloads.apache.org/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-src.tar.gz -O - | tar -xz -C $WORK_DIR \
+#    && cd hbase-${HBASE_VERSION} \
+#    && mvn install -DskipTests assembly:single -Prelease \
+#    && cp $WORK_DIR/hbase-${HBASE_VERSION}/hbase-assembly/target/hbase-${HBASE_VERSION}-bin.tar.gz $WORK_DIR/ \
+#    && cd $WORK_DIR \
+#    && rm -fr hbase-${HBASE_VERSION} \
+#    && tar zxf hbase-${HBASE_VERSION}-bin.tar.gz \
+#    && rm hbase-${HBASE_VERSION}-bin.tar.gz
+RUN wget -qc https://github.com/liusheng/package/releases/download/hbase-aarch64/hbase-${HBASE_VERSION}.tar.gz -O - | tar -xz -C $WORK_DIR
 COPY conf/hbase/hbase-site.xml $HBASE_HOME/conf
 
 # setup hive
-RUN wget -qc https://downloads.apache.org/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-src.tar.gz -O - | tar -xz -C $WORK_DIR \
-    && cd $WORK_DIR/apache-hive-${HIVE_VERSION}-src/ \
-    && mvn clean package -Pdist -DskipTests \
-    && cp $WORK_DIR/apache-hive-${HIVE_VERSION}-src//packaging/target/apache-hive-${HIVE_VERSION}-bin.tar.gz $WORK_DIR/ \
-    && cd $WORK_DIR \
-    && rm -fr apache-hive-${HIVE_VERSION}-src \
-    && tar zxf apache-hive-${HIVE_VERSION}-bin.tar.gz \
-    && rm apache-hive-${HIVE_VERSION}-bin.tar.gz
+#RUN wget -qc https://downloads.apache.org/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-src.tar.gz -O - | tar -xz -C $WORK_DIR \
+#    && cd $WORK_DIR/apache-hive-${HIVE_VERSION}-src/ \
+#    && mvn clean package -Pdist -DskipTests \
+#    && cp $WORK_DIR/apache-hive-${HIVE_VERSION}-src//packaging/target/apache-hive-${HIVE_VERSION}-bin.tar.gz $WORK_DIR/ \
+#    && cd $WORK_DIR \
+#    && rm -fr apache-hive-${HIVE_VERSION}-src \
+#    && tar zxf apache-hive-${HIVE_VERSION}-bin.tar.gz \
+#    && rm apache-hive-${HIVE_VERSION}-bin.tar.gz
+RUN wget -qc https://github.com/liusheng/package/releases/download/hive-aarch64/apache-hive-${HIVE_VERSION}-bin.tar.gz -O - | tar -xz -C $WORK_DIR
 COPY conf/hive/hive-site.xml $HIVE_HOME/conf
 
 # setup Spark
-RUN wget -qc https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}.tgz -O - | tar -xz -C $WORK_DIR \
-    && cd spark-${SPARK_VERSION} \
-    # ./dev/make-distribution.sh --name custom-spark --tgz
-    && ./dev/make-distribution.sh --name custom-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes \
-    && cp spark-${SPARK_VERSION}-bin-custom-spark.tgz $WORK_DIR/ \
-    && cd $WORK_DIR/ \
-    && rm -fr spark-${SPARK_VERSION} \
-    && tar zxf spark-${SPARK_VERSION}-bin-custom-spark.tgz \
-    && rm spark-${SPARK_VERSION}-bin-custom-spark.tgz
+#RUN wget -qc https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}.tgz -O - | tar -xz -C $WORK_DIR \
+#    && cd spark-${SPARK_VERSION} \
+#    # ./dev/make-distribution.sh --name custom-spark --tgz
+#    && ./dev/make-distribution.sh --name custom-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes \
+#    && cp spark-${SPARK_VERSION}-bin-custom-spark.tgz $WORK_DIR/ \
+#    && cd $WORK_DIR/ \
+#    && rm -fr spark-${SPARK_VERSION} \
+#    && tar zxf spark-${SPARK_VERSION}-bin-custom-spark.tgz \
+#    && rm spark-${SPARK_VERSION}-bin-custom-spark.tgz
+RUN wget -qc https://github.com/liusheng/package/releases/download/spark-aarch64/spark-${SPARK_VERSION}.tar.gz -O - | tar -xz -C $WORK_DIR
 
 # setup kafka
-RUN wget -qc https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka-${KAFKA_VERSION}-src.tgz  -O - | tar -xz -C $WORK_DIR \
-    && cd ${WORK_DIR}/kafka-${KAFKA_VERSION}-src \
-    && ./gradlew clean releaseTarGz \
-    && cp ${WORK_DIR}/kafka-${KAFKA_VERSION}-src/core/build/distributions/*.tgz ${WORK_DIR}/ \
-    && cd ${WORK_DIR} \
-    && tar -zxf kafka_2.13-${KAFKA_VERSION}.tgz \
-    && rm -fr ${WORK_DIR}/kafka-${KAFKA_VERSION}-src
+#RUN wget -qc https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka-${KAFKA_VERSION}-src.tgz  -O - | tar -xz -C $WORK_DIR \
+#    && cd ${WORK_DIR}/kafka-${KAFKA_VERSION}-src \
+#    && ./gradlew clean releaseTarGz \
+#    && cp ${WORK_DIR}/kafka-${KAFKA_VERSION}-src/core/build/distributions/*.tgz ${WORK_DIR}/ \
+#    && cd ${WORK_DIR} \
+#    && tar -zxf kafka_2.13-${KAFKA_VERSION}.tgz \
+#    && rm -fr ${WORK_DIR}/kafka-${KAFKA_VERSION}-src
+RUN wget -qc https://github.com/liusheng/package/releases/download/kafka-aarch64/kafka_2.13-${KAFKA_VERSION}.tar.gz -O - | tar -xz -C $WORK_DIR
+
 
 # setup livy
-RUN wget https://downloads.apache.org/incubator/livy/${LIVY_VERSION}-incubating/apache-livy-${LIVY_VERSION}-incubating-bin.zip \
-    && unzip apache-livy-${LIVY_VERSION}-incubating-bin.zip \
-    && rm apache-livy-${LIVY_VERSION}-incubating-bin.zip
+#RUN wget https://downloads.apache.org/incubator/livy/${LIVY_VERSION}-incubating/apache-livy-${LIVY_VERSION}-incubating-bin.zip \
+#    && unzip apache-livy-${LIVY_VERSION}-incubating-bin.zip \
+#    && rm apache-livy-${LIVY_VERSION}-incubating-bin.zip
+RUN wget -qc https://github.com/liusheng/package/releases/download/livy-aarch64/apache-livy-${LIVY_VERSION}-incubating-bin.tar.gz -O - | tar -xz -C $WORK_DIR
