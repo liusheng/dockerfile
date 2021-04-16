@@ -1,0 +1,11 @@
+[everything]
+name=everything
+baseurl=http://119.3.219.20:82/openEuler:/20.03:/LTS:/Next/standard_aarch64
+enabled=1
+gpgcheck=0
+
+[EPOL]
+name=everything
+baseurl=http://119.3.219.20:82/openEuler:/20.03:/LTS:/Next:/Epol/standard_aarch64
+enabled=1
+gpgcheck=0

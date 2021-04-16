@@ -1,5 +1,7 @@
-FROM openeuler-21.03
+FROM openeuler-20.03-lts-next
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+COPY openEuler.repo /etc/yum.repos.d/
 
 RUN yum update -y && yum install -y \
     sudo git tar curl patch shadow-utils make cmake gcc gcc-c++ \
