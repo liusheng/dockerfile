@@ -7,15 +7,17 @@ RUN yum update -y && yum install -y \
     sudo git tar curl patch shadow-utils make cmake gcc gcc-c++ \
     rpm-build dnf-plugins-core make rpmdevtools wget python3-pip python2-pip
 
-RUN sed -i s'/TMOUT=300/TMOUT=300000000000/' /etc/bashrc
+RUN yum update -y && yum install -y python2-wheel openssl-devel libffi-devel python3-devel
 
-RUN pip install renderspec
+RUN sed -i s'/TMOUT=300/TMOUT=300000000000/' /etc/bashrc
 
 RUN rpmdev-setuptree
 
-RUN git clone https://opendev.org/openstack/rpm-packaging.git /root/rpm-packaging
-RUN pip3 install git+https://gitee.com/openeuler/pyporter
+RUN curl -L https://gitee.com/openeuler/openstack/raw/master/tools/pyporter -o /usr/local/bin/pyporter \
+    && chmod +x /usr/local/bin/pyporter
+
+RUN pip3 install pandas requests click
 
 WORKDIR /root/rpmbuild
-
-# yum-builddep SPECS/openstack-glance.spec
+COPY openeuler_pkg.py ./
+COPY projects.csv ./
