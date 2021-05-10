@@ -37,8 +37,13 @@ def _build_spec_pkg(pkg_name, pypi_name, version):
                       pypi_name, version, e.returncode, e.output)
 
     # check if spec and source package exist
-    spec_name = (pkg_name.replace(".", "-") + ".spec" if pkg_name.startswith("python-")
-                 else "python-" + pkg_name.replace(".", "-") + ".spec")
+    spec_name = 'python-' + pypi_name.replace(".", "-")
+    if pypi_name.startswith("python-"):
+        spec_name = pypi_name.replace(".", "-") + '.spec'
+    else:
+        spec_name = "python-" + pypi_name.replace(".", "-") + '.spec'
+    # spec_name = (pkg_name.replace(".", "-") + ".spec" if pkg_name.startswith("python-")
+    #              else "python-" + pkg_name.replace(".", "-") + ".spec")
     if os.path.isfile("SPECS/" + spec_name):
         spec_path = "SPECS/" + spec_name
     elif os.path.isfile("SPECS/" + spec_name.lower()):
@@ -72,7 +77,7 @@ def _fork_repo(repo_name, gitee_org, gitee_pat):
         elif resp.status_code != 201:
             logging.error("Fork repo failed, %s", resp.text)
     except requests.RequestException as e:
-        logging.exception("HTTP request to gitee failed:", e)
+        logging.exception("HTTP request to gitee failed: %s", e)
     return repo_missed
 
 
@@ -90,7 +95,7 @@ def _add_repo_branch(repo_name, version, gitee_org, gitee_user,
     resp = requests.request("GET", url)
     if resp.status_code == 404:
         logging.error("Branch: %s not found for project:：%s/%s",
-            remote_branch, gitee_org, repo_name)
+                      remote_branch, gitee_org, repo_name)
         return True
     logging.debug("Add branch for %s-%s", repo_name, version)
     cmd = 'cd %(src_dir)s/%(pkg_name)s/; ' \
@@ -156,7 +161,7 @@ def _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
         if resp.status_code != 201:
             logging.info("Create pull request failed, %s", resp.text)
     except requests.RequestException as e:
-        logging.exception("HTTP request to gitee failed:", e)
+        logging.exception("HTTP request to gitee failed: %s", e)
 
 
 def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
@@ -254,6 +259,7 @@ def clean_forks(project):
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
 @click.option('--dry-run', is_flag=True, help="Dry run or not")
+@click.option('--shorten-description', is_flag=True, help="Shorten description in spec")
 def build(project, log_file, dry_run):
     if project:
         select_rows = cli.project_df[cli.project_df['pkg_name'] == project]
