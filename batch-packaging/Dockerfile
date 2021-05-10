@@ -19,5 +19,5 @@ RUN curl -L https://gitee.com/openeuler/openstack/raw/master/tools/pyporter -o /
 RUN pip3 install pandas requests click
 
 WORKDIR /root/rpmbuild
-COPY openeuler_pkg.py ./
+COPY batch-packaging.py ./
 COPY projects.csv ./

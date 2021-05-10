@@ -42,8 +42,6 @@ def _build_spec_pkg(pkg_name, pypi_name, version):
         spec_name = pypi_name.replace(".", "-") + '.spec'
     else:
         spec_name = "python-" + pypi_name.replace(".", "-") + '.spec'
-    # spec_name = (pkg_name.replace(".", "-") + ".spec" if pkg_name.startswith("python-")
-    #              else "python-" + pkg_name.replace(".", "-") + ".spec")
     if os.path.isfile("SPECS/" + spec_name):
         spec_path = "SPECS/" + spec_name
     elif os.path.isfile("SPECS/" + spec_name.lower()):
@@ -213,24 +211,15 @@ def _delete_fork(pkg_name, pypi_name, gitee_user, gitee_pat, gitee_org):
               help="Email address for git commit changes")
 @click.option("-o", "--gitee-org", envvar='GITEE_ORG', show_default=True,
               default="src-openeuler", help="Gitee organization name of openEuler")
-@click.option("-r", "--remote-branch", default="oepkg_openstack-common_oe-20.03-LTS-SP2",
-              show_default=True, help="Target remote branch to create PR")
-@click.option("-d", "--src-dir", default='src-repos', show_default=True,
-              help="Directory for storing source repo locally")
-@click.option("-s", "--src-branch", default='add-pkg-openstack-r-q', show_default=True,
-              help="Source branch name for creating PR")
 @click.option("-p", "--projects-data", default='projects.csv', show_default=True,
               help="File of projects list, includes 'pkg_name', 'pypi_name', 'version' 3 columns ")
-def cli(gitee_user, gitee_pat, gitee_email, gitee_org, remote_branch, src_dir, src_branch, projects_data):
+def cli(gitee_user, gitee_pat, gitee_email, gitee_org, projects_data):
     if not gitee_pat:
         raise click.ClickException('Please specify gitee PAT(personal access token)')
     cli.gitee_user = gitee_user
     cli.gitee_pat = gitee_pat
     cli.gitee_email = gitee_email
     cli.gitee_org = gitee_org
-    cli.remote_branch = remote_branch
-    cli.src_dir = src_dir
-    cli.src_branch = src_branch
     cli.projects_data = projects_data
     if cli.projects_data:
         projects = pandas.read_csv(cli.projects_data)
@@ -254,13 +243,18 @@ def clean_forks(project):
 
 
 @cli.command()
-@click.option('--project', default='', show_default=True,
+@click.option("-r", "--remote-branch", default="oepkg_openstack-common_oe-20.03-LTS-SP2",
+              show_default=True, help="Target remote branch to create PR")
+@click.option("-s", "--src-branch", default='add-pkg-openstack-r-q', show_default=True,
+              help="Source branch name for creating PR")
+@click.option("-d", "--src-dir", default='src-repos', show_default=True,
+              help="Directory for storing source repo locally")
+@click.option('-P', '--project', default='', show_default=True,
               help="Specified project to build, build all if not specified")
+@click.option('-dr', '--dry-run', is_flag=True, help="Dry run or not")
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
-@click.option('--dry-run', is_flag=True, help="Dry run or not")
-# @click.option('--shorten-description', is_flag=True, help="Shorten description in spec")
-def build(project, log_file, dry_run):
+def build(remote_branch, src_branch, src_dir, project, dry_run, log_file):
     if project:
         select_rows = cli.project_df[cli.project_df['pkg_name'] == project]
         if select_rows.empty:
@@ -287,7 +281,7 @@ def build(project, log_file, dry_run):
     for row in select_rows.itertuples():
         deps_missed, build_failed, repo_missed, branch_missed = _build_one(
             row.pkg_name, row.pypi_name, row.version, cli.gitee_pat, cli.gitee_org,
-            cli.gitee_user, cli.gitee_email, cli.src_dir, cli.src_branch, cli.remote_branch,
+            cli.gitee_user, cli.gitee_email, src_dir, src_branch, remote_branch,
             all_pkg_names=all_pkg_names,
             dry_run=dry_run)
         if deps_missed:

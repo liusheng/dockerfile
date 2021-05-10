@@ -10,6 +10,6 @@ docker run --name openeuler-pkg --hostname openeuler-pkg -it openeuler-pkg-build
 
 - Run package building script in container
 ```shell script
-python3 openeuler_pkg.py build
+python3 batch-packaging.py build
 ```
 you can run `python3 openeuler_pkg.py --help` to get more help info.
