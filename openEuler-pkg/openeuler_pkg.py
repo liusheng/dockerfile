@@ -209,7 +209,7 @@ def _delete_fork(pkg_name, pypi_name, gitee_user, gitee_pat, gitee_org):
 @click.option("-u", "--gitee-user", envvar='GITEE_USER', default="sean-lau", show_default=True,
               help="Gitee user account who running this tool")
 @click.option("-t", "--gitee-pat", envvar='GITEE_PAT', show_default=True, help="Gitee personal access token")
-@click.option("-e", "--gitee-email", default="liusheng2048@gmaili.com", show_default=True,
+@click.option("-e", "--gitee-email", default="liusheng2048@gmail.com", show_default=True,
               help="Email address for git commit changes")
 @click.option("-o", "--gitee-org", envvar='GITEE_ORG', show_default=True,
               default="src-openeuler", help="Gitee organization name of openEuler")
