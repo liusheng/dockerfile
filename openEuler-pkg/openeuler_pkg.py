@@ -259,7 +259,7 @@ def clean_forks(project):
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
 @click.option('--dry-run', is_flag=True, help="Dry run or not")
-@click.option('--shorten-description', is_flag=True, help="Shorten description in spec")
+# @click.option('--shorten-description', is_flag=True, help="Shorten description in spec")
 def build(project, log_file, dry_run):
     if project:
         select_rows = cli.project_df[cli.project_df['pkg_name'] == project]
