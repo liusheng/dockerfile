@@ -136,27 +136,28 @@ def _copy_spec_src(repo_name, version, spec_path, source_path, src_dir):
 
 
 def _commit_push(repo_name, version, src_dir,
-                 gitee_user, gitee_pat):
+                 gitee_user, gitee_pat, commit_message):
     logging.debug("Commit changes for %s-%s", repo_name, version)
     commit_cmd = 'cd %(src_dir)s/%(repo_name)s/; ' \
                  'git add .; ' \
-                 'git commit -am "Add package for OpenStack R and Q support";' \
+                 'git commit -am "%(commit_message)s";' \
                  'git remote set-url origin https://%(gitee_user)s:%(gitee_pat)s@gitee.com/%(gitee_user)s/%(repo_name)s;' \
                  'git push origin -f' % {"src_dir": src_dir,
                                          "repo_name": repo_name,
                                          "gitee_user": gitee_user,
-                                         "gitee_pat": gitee_pat}
+                                         "gitee_pat": gitee_pat,
+                                         "commit_message": commit_message}
     logging.debug("CMD：%s", commit_cmd)
     subprocess.call(commit_cmd, shell=True)
 
 
 def _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
-                         src_branch, remote_branch):
+                         src_branch, remote_branch, commit_message):
     logging.debug("Creating pull request for project: %s", repo_name)
     try:
         url = "https://gitee.com/api/v5/repos/%s/%s/pulls" % (gitee_org, repo_name)
         resp = requests.request("POST", url, data={"access_token": gitee_pat,
-                                                   "title": "Add package for OpenStack Q and R support",
+                                                   "title": commit_message,
                                                    "head": gitee_user + ":" + src_branch,
                                                    "base": remote_branch})
         if resp.status_code != 201:
@@ -167,7 +168,7 @@ def _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
 
 def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
                gitee_email, src_dir, src_branch, remote_branch, short_description,
-               all_pkg_names=None, dry_run=False):
+               commit_message, all_pkg_names=None, dry_run=False):
     """
     :param pkg_name: package name of project
     :param pypi_name: pypi name of project
@@ -192,9 +193,9 @@ def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
     branch_missed = _add_repo_branch(repo_name, version, gitee_org, gitee_user,
                                      gitee_email, src_dir, src_branch, remote_branch)
     _copy_spec_src(repo_name, version, spec_path, source_path, src_dir)
-    _commit_push(repo_name, version, src_dir, gitee_user, gitee_pat)
+    _commit_push(repo_name, version, src_dir, gitee_user, gitee_pat, commit_message)
     _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
-                         src_branch, remote_branch)
+                         src_branch, remote_branch, commit_message)
     return deps_missed, build_failed, False, branch_missed
 
 
@@ -256,9 +257,12 @@ def clean_forks(project):
               help="Specified project to build, build all if not specified")
 @click.option('-dr', '--dry-run', is_flag=True, help="Dry run or not")
 @click.option('-sd', '--short-description', is_flag=True, help="Shorten description")
+@click.option("-cm", "--commit-message", default='Add package for OpenStack Q and R support',
+              show_default=True, help="Commit message and PR tittle")
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
-def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_description):
+def build(remote_branch, src_branch, src_dir, project, dry_run, short_description,
+          commit_message, log_file):
     if project:
         select_rows = cli.project_df[cli.project_df['pkg_name'] == project]
         if select_rows.empty:
@@ -286,7 +290,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_
         deps_missed, build_failed, repo_missed, branch_missed = _build_one(
             row.pkg_name, row.pypi_name, row.version, cli.gitee_pat, cli.gitee_org,
             cli.gitee_user, cli.gitee_email, src_dir, src_branch, remote_branch,
-            short_description,
+            short_description, commit_message,
             all_pkg_names=all_pkg_names,
             dry_run=dry_run)
         if deps_missed:
@@ -307,7 +311,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_
 
 def _add_comment(pkg_name, pypi_name, gitee_pat, gitee_org, comment, pr_num):
     repo_name = _get_repo_name(pkg_name, pypi_name, gitee_pat, gitee_org)
-    logging.info("Adding comment: %s for project: %s in PR: %s", comment, repo_name, pr_num)
+    print("Adding comment: %s for project: %s in PR: %s" % (comment, repo_name, pr_num))
     url = 'https://gitee.com/api/v5/repos/%s/%s/pulls/%s/comments' % (gitee_org, repo_name, pr_num)
     body = {"access_token": "cba81f9c98c9f2eda84d6190e130b630", "body": "%s" % comment}
     resp = requests.request("POST", url, data=body)
