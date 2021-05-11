@@ -230,7 +230,7 @@ def cli(gitee_user, gitee_pat, gitee_email, gitee_org, projects_data):
 
 
 @cli.command()
-@click.option('--project', default='', show_default=True,
+@click.option('-P', '--project', default='', show_default=True,
               help="Specified project fork to clean, clean all if not specified")
 def clean_forks(project):
     if project:
@@ -305,11 +305,33 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_
     logging.debug("Remote branch not found: %s", miss_branch_repos)
 
 
-# TODO support comment '/retest'
+def _add_comment(pkg_name, pypi_name, gitee_pat, gitee_org, comment, pr_num):
+    repo_name = _get_repo_name(pkg_name, pypi_name, gitee_pat, gitee_org)
+    url = 'https://gitee.com/api/v5/repos/%s/%s/pulls/%s/comments' % (gitee_org, repo_name, pr_num)
+    body = {"access_token": "cba81f9c98c9f2eda84d6190e130b630", "body": "%s" % comment}
+    resp = requests.request("POST", url, data=body)
+    if resp.status_code != 201:
+        logging.exception("Comment PR: failed, reason: %s", pr_num, resp.reason)
+
+
 @click.command()
-@click.option('--comment', default="/retest", help="Comment to PR")
-def comment_pr(comment):
-    raise click.ClickException("Comment PR command not implemented")
+@click.option('-P', '--project', default='', show_default=True,
+              help="Specified project fork to commit its PR, comment all if not specified")
+@click.option('-c', '--comment', default="/retest", help="Comment to PR")
+def comment_pr(project, comment):
+    projects = pandas.read_csv(cli.projects_data)
+    projects_df = pandas.DataFrame(
+        projects, columns=["pkg_name", "pypi_name", "version", 'pr_num'])
+    if project:
+        select_rows = projects_df[projects_df['pkg_name'] == project]
+        if select_rows.empty:
+            select_rows = projects_df[projects_df['pypi_name'] == project]
+        if select_rows.empty:
+            raise click.ClickException("Specified project %s not in %s" % (project, cli.projects_data))
+    else:
+        select_rows = projects_df
+    for row in select_rows.itertuples():
+        _add_comment(row.pkg_name, row.pypi_name, cli.gitee_pat, cli.gitee_org, comment, row.pr_num)
 
 
 if __name__ == '__main__':
