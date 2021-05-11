@@ -314,7 +314,7 @@ def _add_comment(pkg_name, pypi_name, gitee_pat, gitee_org, comment, pr_num):
         logging.exception("Comment PR: failed, reason: %s", pr_num, resp.reason)
 
 
-@click.command()
+@cli.command()
 @click.option('-P', '--project', default='', show_default=True,
               help="Specified project fork to commit its PR, comment all if not specified")
 @click.option('-c', '--comment', default="/retest", help="Comment to PR")
@@ -331,6 +331,9 @@ def comment_pr(project, comment):
     else:
         select_rows = projects_df
     for row in select_rows.itertuples():
+        if str(row.pr_num) == 'nan':
+            raise click.ClickException(
+                "'pr_num' column is empty for project %s in %s" % (row.pypi_name, cli.projects_data))
         _add_comment(row.pkg_name, row.pypi_name, cli.gitee_pat, cli.gitee_org, comment, row.pr_num)
 
 
