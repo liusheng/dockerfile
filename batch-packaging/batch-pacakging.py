@@ -29,9 +29,12 @@ def _check_deps(pypi_name, version, all_pkg_names=None):
     return miss
 
 
-def _build_spec_pkg(pkg_name, pypi_name, version):
+def _build_spec_pkg(pypi_name, version, short_description):
     try:
-        subprocess.call(["pyporter", pypi_name, "-b", "-py2", "-v", version])
+        cmd = ["pyporter", pypi_name, "-b", "-py2", "-v", version]
+        if short_description:
+            cmd.append('-sd')
+        subprocess.call(cmd)
     except subprocess.CalledProcessError as e:
         logging.error("Build package: %s-%s failed, error code: %s, error: %s",
                       pypi_name, version, e.returncode, e.output)
@@ -163,7 +166,7 @@ def _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
 
 
 def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
-               gitee_email, src_dir, src_branch, remote_branch,
+               gitee_email, src_dir, src_branch, remote_branch, short_description,
                all_pkg_names=None, dry_run=False):
     """
     :param pkg_name: package name of project
@@ -174,7 +177,7 @@ def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
     """
     build_failed = False
     deps_missed = _check_deps(pypi_name, version, all_pkg_names)
-    spec_path, source_path = _build_spec_pkg(pkg_name, pypi_name, version)
+    spec_path, source_path = _build_spec_pkg(pypi_name, version, short_description)
     if not os.path.isfile(spec_path) or not os.path.isfile(source_path):
         logging.error("Failed to build spec file for package: %s-%s",
                       pypi_name, version)
@@ -252,9 +255,10 @@ def clean_forks(project):
 @click.option('-P', '--project', default='', show_default=True,
               help="Specified project to build, build all if not specified")
 @click.option('-dr', '--dry-run', is_flag=True, help="Dry run or not")
+@click.option('-sd', '--short-description', is_flag=True, help="Shorten description")
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
-def build(remote_branch, src_branch, src_dir, project, dry_run, log_file):
+def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_description):
     if project:
         select_rows = cli.project_df[cli.project_df['pkg_name'] == project]
         if select_rows.empty:
@@ -270,7 +274,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file):
                             handlers=[logging.FileHandler("rpm_build.log"),
                                       logging.StreamHandler(sys.stdout)])
 
-    _prepare_dir(cli.src_dir)
+    _prepare_dir(src_dir)
     all_pkg_names = [p.lower() for p in cli.project_df["pkg_name"].to_list()]
 
     miss_requires = set()
@@ -282,6 +286,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file):
         deps_missed, build_failed, repo_missed, branch_missed = _build_one(
             row.pkg_name, row.pypi_name, row.version, cli.gitee_pat, cli.gitee_org,
             cli.gitee_user, cli.gitee_email, src_dir, src_branch, remote_branch,
+            short_description,
             all_pkg_names=all_pkg_names,
             dry_run=dry_run)
         if deps_missed:
