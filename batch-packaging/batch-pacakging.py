@@ -307,6 +307,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, log_file, short_
 
 def _add_comment(pkg_name, pypi_name, gitee_pat, gitee_org, comment, pr_num):
     repo_name = _get_repo_name(pkg_name, pypi_name, gitee_pat, gitee_org)
+    logging.info("Adding comment: %s for project: %s in PR: %s", comment, repo_name, pr_num)
     url = 'https://gitee.com/api/v5/repos/%s/%s/pulls/%s/comments' % (gitee_org, repo_name, pr_num)
     body = {"access_token": "cba81f9c98c9f2eda84d6190e130b630", "body": "%s" % comment}
     resp = requests.request("POST", url, data=body)
