@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import logging
-import sys
 import os
 import subprocess
+import sys
+
+import click
 import pandas
 import requests
-import click
 
 
 def _prepare_dir(src_dir):
@@ -218,14 +219,13 @@ def _delete_fork(pkg_name, pypi_name, gitee_user, gitee_pat, gitee_org):
 
 
 @click.group()
-@click.option("-u", "--gitee-user", envvar='GITEE_USER', default="sean-lau", show_default=True,
+@click.option("-u", "--gitee-user", envvar='GITEE_USER', show_default=True,
               help="Gitee user account who running this tool")
-@click.option("-t", "--gitee-pat", envvar='GITEE_PAT', show_default=True, help="Gitee personal access token")
-@click.option("-e", "--gitee-email", default="liusheng2048@gmail.com", show_default=True,
-              help="Email address for git commit changes")
+@click.option("-t", "--gitee-pat", envvar='GITEE_PAT', help="Gitee personal access token")
+@click.option("-e", "--gitee-email", envvar='GITEE_EMAIL', help="Email address for git commit changes")
 @click.option("-o", "--gitee-org", envvar='GITEE_ORG', show_default=True,
               default="src-openeuler", help="Gitee organization name of openEuler")
-@click.option("-p", "--projects-data", default='projects.csv', show_default=True,
+@click.option("-p", "--projects-data",
               help="File of projects list, includes 'pkg_name', 'pypi_name', 'version' 3 columns ")
 def cli(gitee_user, gitee_pat, gitee_email, gitee_org, projects_data):
     if not gitee_pat:
@@ -257,18 +257,15 @@ def clean_forks(project):
 
 
 @cli.command()
-@click.option("-r", "--remote-branch", default="oepkg_openstack-common_oe-20.03-LTS-SP2",
-              show_default=True, help="Target remote branch to create PR")
-@click.option("-s", "--src-branch", default='add-pkg-openstack-r-q', show_default=True,
-              help="Source branch name for creating PR")
+@click.option("-r", "--remote-branch", help="Target remote branch to create PR")
+@click.option("-s", "--src-branch", help="Source branch name for creating PR")
 @click.option("-d", "--src-dir", default='src-repos', show_default=True,
               help="Directory for storing source repo locally")
 @click.option('-P', '--project', default='', show_default=True,
               help="Specified project to build, build all if not specified")
 @click.option('-dr', '--dry-run', is_flag=True, help="Dry run or not")
 @click.option('-sd', '--short-description', is_flag=True, help="Shorten description")
-@click.option("-cm", "--commit-message", default='Add package for OpenStack Q and R support',
-              show_default=True, help="Commit message and PR tittle")
+@click.option("-cm", "--commit-message", help="Commit message and PR tittle")
 @click.option('--log-file', default='rpm_build.log', show_default=True,
               help="File to store log")
 def build(remote_branch, src_branch, src_dir, project, dry_run, short_description,

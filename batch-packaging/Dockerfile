@@ -1,4 +1,7 @@
+# NOTE: the following image name is the openEuler docker images name from dailybuild,
+# may need to modify
 FROM openeuler-20.03-lts-sp2
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY openEuler.repo /etc/yum.repos.d/
