@@ -134,19 +134,28 @@ def _copy_spec_src(repo_name, version, spec_path, source_path, src_dir):
     logging.debug("CMD：%s", cp_src_pkg_cmd)
     subprocess.call(cp_src_pkg_cmd, shell=True)
 
+    check_build_cmd = ["rpmbuild", "-ba", spec_path]
+    status = subprocess.call(check_build_cmd)
+    if status != 0:
+        logging.error("Project：%s built failed, need to manually fix", repo_name)
+        return False
+    return True
+
 
 def _commit_push(repo_name, version, src_dir,
-                 gitee_user, gitee_pat, commit_message):
+                 gitee_user, gitee_pat, commit_message, do_push=True):
     logging.debug("Commit changes for %s-%s", repo_name, version)
     commit_cmd = 'cd %(src_dir)s/%(repo_name)s/; ' \
                  'git add .; ' \
                  'git commit -am "%(commit_message)s";' \
                  'git remote set-url origin https://%(gitee_user)s:%(gitee_pat)s@gitee.com/%(gitee_user)s/%(repo_name)s;' \
-                 'git push origin -f' % {"src_dir": src_dir,
-                                         "repo_name": repo_name,
-                                         "gitee_user": gitee_user,
-                                         "gitee_pat": gitee_pat,
-                                         "commit_message": commit_message}
+                 % {"src_dir": src_dir,
+                    "repo_name": repo_name,
+                    "gitee_user": gitee_user,
+                    "gitee_pat": gitee_pat,
+                    "commit_message": commit_message}
+    if do_push:
+        commit_cmd += 'git push origin -f'
     logging.debug("CMD：%s", commit_cmd)
     subprocess.call(commit_cmd, shell=True)
 
@@ -174,29 +183,30 @@ def _build_one(pkg_name, pypi_name, version, gitee_pat, gitee_org, gitee_user,
     :param pypi_name: pypi name of project
     :param version: version of project
     :param all_pkg_names: all pkg names
-    :return: missed requires, build failed or not, repo missed or not, branch missed or not
+    :return: missed requires, spec missed or not, repo missed or not, branch missed or not, build failed
     """
-    build_failed = False
     deps_missed = _check_deps(pypi_name, version, all_pkg_names)
     spec_path, source_path = _build_spec_pkg(pypi_name, version, short_description)
     if not os.path.isfile(spec_path) or not os.path.isfile(source_path):
         logging.error("Failed to build spec file for package: %s-%s",
                       pypi_name, version)
-        return deps_missed, True, False, False
+        return deps_missed, True, False, False, False
     repo_name = _get_repo_name(pkg_name, pypi_name, gitee_pat, gitee_org)
     if not repo_name:
-        return deps_missed, False, True, False
+        return deps_missed, False, True, False, False
     if dry_run:
-        return deps_missed, build_failed, False, False
+        return deps_missed, False, False, False, False
     _fork_repo(repo_name, gitee_org, gitee_pat)
     _clone_repo(repo_name, gitee_user, src_dir)
     branch_missed = _add_repo_branch(repo_name, version, gitee_org, gitee_user,
                                      gitee_email, src_dir, src_branch, remote_branch)
-    _copy_spec_src(repo_name, version, spec_path, source_path, src_dir)
-    _commit_push(repo_name, version, src_dir, gitee_user, gitee_pat, commit_message)
-    _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
-                         src_branch, remote_branch, commit_message)
-    return deps_missed, build_failed, False, branch_missed
+    build_success = _copy_spec_src(repo_name, version, spec_path, source_path, src_dir)
+    _commit_push(repo_name, version, src_dir, gitee_user, gitee_pat,
+                 commit_message, do_push=build_success)
+    if build_success:
+        _create_pull_request(repo_name, gitee_org, gitee_user, gitee_pat,
+                             src_branch, remote_branch, commit_message)
+    return deps_missed, False, False, branch_missed, not build_success
 
 
 def _delete_fork(pkg_name, pypi_name, gitee_user, gitee_pat, gitee_org):
@@ -282,12 +292,13 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, short_descriptio
     all_pkg_names = [p.lower() for p in cli.project_df["pkg_name"].to_list()]
 
     miss_requires = set()
+    miss_spec = []
     pkgs_build_failed = []
     miss_src_repos = []
     miss_branch_repos = []
 
     for row in select_rows.itertuples():
-        deps_missed, build_failed, repo_missed, branch_missed = _build_one(
+        deps_missed, spec_missed, repo_missed, branch_missed, build_failed = _build_one(
             row.pkg_name, row.pypi_name, row.version, cli.gitee_pat, cli.gitee_org,
             cli.gitee_user, cli.gitee_email, src_dir, src_branch, remote_branch,
             short_description, commit_message,
@@ -295,6 +306,8 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, short_descriptio
             dry_run=dry_run)
         if deps_missed:
             miss_requires = miss_requires | deps_missed
+        if spec_missed:
+            miss_spec.append("%s-%s" % (row.pypi_name, row.version))
         if build_failed:
             pkgs_build_failed.append("%s-%s" % (row.pypi_name, row.version))
         if repo_missed:
@@ -304,6 +317,7 @@ def build(remote_branch, src_branch, src_dir, project, dry_run, short_descriptio
 
     logging.debug("=" * 20 + "Summary" + "=" * 20)
     logging.debug("Miss requires: %s", miss_requires)
+    logging.debug("Miss spec: %s", miss_spec)
     logging.debug("Build failed packages: %s", pkgs_build_failed)
     logging.debug("Source repos not found: %s", miss_src_repos)
     logging.debug("Remote branch not found: %s", miss_branch_repos)
